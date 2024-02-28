@@ -23,6 +23,7 @@ urls = [
     "https://www.xataka.com/analisis/iphone-15-iphone-15-plus-analisis-caracteristicas-precio",
     "https://elpais.com/tecnologia/tu-tecnologia/2023-09-27/el-iphone-15-a-prueba-lo-mejor-y-lo-peor-del-movil-de-gama-alta-mas-asequible-de-apple.html"
 ]
+word = "apple"
 texts = []
 failedUrls = []
 for url in urls:
@@ -41,6 +42,12 @@ for url in urls:
         print(f"Failed to retrieve content from {url}")
 
 
+
+#Phrases with KeyWord
+phrasesKeyword = {
+    'YES': 0,
+    'NO': 0
+}
 #Almacenar por cada tipo de entidad su conteo
 entitiesCount={}
 #Procesamos los textos de las webs con spacy
@@ -51,9 +58,18 @@ sentences = []
 for doc in docs:
     for sent in doc.sents:
         sentence = []
+        first = True
         for token in sent:
+            #Aparece keyword por lo tanto aumentar contador
+            if token.text.lower() == word and first:
+                first = False
+                phrasesKeyword['YES'] +=1
+            #if not token.is_stop:
             sentence.append(token.lemma_)
         sentences.append(" ".join(sentence))
+        #Si no aparece keyword aumentar en 1 contador no
+        if first:
+            phrasesKeyword['NO'] +=1
     for ent in doc.ents:
         if ent.label_ not in entitiesCount:
             entitiesCount[ent.label_] = 1
@@ -70,7 +86,7 @@ sent_class_arr = []
 labToVal = {}
 #Asignar según cada valor un count
 for res in sentiment_results:
-    if res > 0.99:
+    if res > 0.7:
         sent = 'POS'
     elif res > 0.001:
         sent = 'NEU'
@@ -90,6 +106,7 @@ if len(failedUrls)>0:
         i += 1
 
 print(labToVal)
+print(phrasesKeyword)
 
 #Crear y mostrar gráficas
 fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10, 4))
