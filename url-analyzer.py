@@ -13,6 +13,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+from collections import defaultdict
+
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -52,12 +54,16 @@ phrasesKeyword = {
 entitiesCount={}
 #Procesamos los textos de las webs con spacy
 docs = [doc for doc in nlp.pipe(texts)]
-#Almacenamos las frases una vez lematizadas
+#Almacenamos las frases una vez lematizadas y si contienen o no la frase formato
+# Formato : [0/1,frase]
+# 0 Indica que no contiene
+# 1 Indica que si contiene
 sentences = []
 #Procesamiento de normalización y detección de entidades
 for doc in docs:
     for sent in doc.sents:
         sentence = []
+        #Indica si una frase contiene keyword, se pone a False cuando contiene, true no contiene
         first = True
         for token in sent:
             #Aparece keyword por lo tanto aumentar contador
@@ -66,10 +72,12 @@ for doc in docs:
                 phrasesKeyword['YES'] +=1
             #if not token.is_stop:
             sentence.append(token.lemma_)
-        sentences.append(" ".join(sentence))
+        contains = 1
         #Si no aparece keyword aumentar en 1 contador no
         if first:
+            contains = 0
             phrasesKeyword['NO'] +=1
+        sentences.append([contains," ".join(sentence)])
     for ent in doc.ents:
         if ent.label_ not in entitiesCount:
             entitiesCount[ent.label_] = 1
@@ -78,26 +86,36 @@ for doc in docs:
 
 print(entitiesCount)
 
-#Asignamos a cada frase un valor entre [0,1] 
-sentiment_results = [sentiment_spanish.sentiment(text) for text in sentences]
+#Asignamos a cada frase un valor entre [0,1] y seguimos manteniendo si contiene o no keyword
+sentiment_results = []
+for element in sentences:
+    sentiment_results.append([element[0],sentiment_spanish.sentiment(element[1])])
 #print(sentiment_results)
 
 sent_class_arr = []
 labToVal = {}
+sentimentKeyword = {
+    0: defaultdict(int),
+    1: defaultdict(int)
+}
 #Asignar según cada valor un count
 for res in sentiment_results:
-    if res > 0.7:
+    if res[1] > 0.5:
         sent = 'POS'
-    elif res > 0.001:
+    elif res[1] > 0.001:
         sent = 'NEU'
     else:
         sent = 'NEG'
-    sent_class_arr.append(sent)
+    sent_class_arr.append(sent[1])
     if sent not in labToVal:
         labToVal[sent] = 1
     else:
         labToVal[sent] += 1
-
+    if res[0] == 0:
+        sentimentKeyword[0][sent] +=1
+    else:
+        sentimentKeyword[1][sent] +=1
+    
 if len(failedUrls)>0:
     print(len(failedUrls) , " have failed: ")
     i=1
@@ -107,6 +125,10 @@ if len(failedUrls)>0:
 
 print(labToVal)
 print(phrasesKeyword)
+#No contiene keyword
+print(sentimentKeyword[0])
+#Contiene Keyword
+print(sentimentKeyword[1])
 
 #Crear y mostrar gráficas
 fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10, 4))
