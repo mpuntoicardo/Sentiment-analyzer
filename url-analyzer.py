@@ -131,15 +131,34 @@ print(sentimentKeyword[0])
 print(sentimentKeyword[1])
 
 #Crear y mostrar gráficas
-fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10, 4))
+fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(10, 7))
 
-df_bar = pd.DataFrame({'lab':list(labToVal.keys()), 'val': list(labToVal.values())})
-df_bar.plot.bar(x='lab',y='val', rot = 0,ax=axes[0])
-axes[0].set_title('Bar Chart')
+colors = ['blue', 'green', 'skyblue', 'yellow']
+
+df_bar = pd.DataFrame({'Sentimiento':list(labToVal.keys()), 'Cantidad': list(labToVal.values())})
+df_bar.plot.bar(x='Sentimiento',y='Cantidad', rot = 0,ax=axes[0,0], color=colors)
+axes[0,0].set_title('Phrases Distribution')
 
 df_pie = pd.DataFrame({'Name':list(labToVal.keys()), 'val': list(labToVal.values())})
-df_pie.plot(kind='pie', y='val', autopct='%1.0f%%', labels=df_pie['Name'],ax=axes[1])
-axes[1].set_title('Pie Chart')
+df_pie.plot(kind='pie', y='val', autopct='%1.0f%%', labels=df_pie['Name'],ax=axes[0,1])
+axes[0,1].set_title('Porcentage of total phrases')
+
+df_Entities = pd.DataFrame({'Tipos':list(entitiesCount.keys()), 'Cantidad': list(entitiesCount.values())})
+df_Entities.plot.bar(x='Tipos',y='Cantidad', rot = 0,ax=axes[0,2], color=colors)
+axes[0,2].set_title('Entities Spotted')
+
+df_ContainsKeyowrd = pd.DataFrame({'Contiene':list(phrasesKeyword.keys()), 'Cantidad': list(phrasesKeyword.values())})
+df_ContainsKeyowrd.plot.barh(x='Contiene',y='Cantidad', rot=0,ax=axes[1,0], color= 'lightblue')
+axes[1,0].set_title('Phrase contains keyword?')
+
+df_PhrasesWithKeyword = pd.DataFrame({'Sentimiento':list(sentimentKeyword[1].keys()), 'Cantidad': list(sentimentKeyword[1].values())})
+df_PhrasesWithKeyword.plot.bar(x='Sentimiento',y='Cantidad', rot = 0,ax=axes[1,1], color=colors)
+axes[1,1].set_title('Phrases with keyword')
+
+df_PhrasesWithoutKeyword = pd.DataFrame({'Sentimiento':list(sentimentKeyword[0].keys()), 'Cantidad': list(sentimentKeyword[0].values())})
+df_PhrasesWithoutKeyword.plot.bar(x='Sentimiento',y='Cantidad', rot = 0,ax=axes[1,2], color=colors)
+axes[1,2].set_title('Phrases without keyword')
+
 
 plt.tight_layout()
 plt.show()
