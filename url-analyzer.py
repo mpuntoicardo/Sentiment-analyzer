@@ -141,7 +141,7 @@ axes[0,0].set_title('Phrases Distribution')
 
 df_pie = pd.DataFrame({'Name':list(labToVal.keys()), 'val': list(labToVal.values())})
 df_pie.plot(kind='pie', y='val', autopct='%1.0f%%', labels=df_pie['Name'],ax=axes[0,1])
-axes[0,1].set_title('Porcentage of total phrases')
+axes[0,1].set_title('Percentage of total phrases')
 
 df_Entities = pd.DataFrame({'Tipos':list(entitiesCount.keys()), 'Cantidad': list(entitiesCount.values())})
 df_Entities.plot.bar(x='Tipos',y='Cantidad', rot = 0,ax=axes[0,2], color=colors)
