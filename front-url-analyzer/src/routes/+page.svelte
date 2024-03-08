@@ -13,8 +13,8 @@
 
 <div class="min-h-screen bg-gradient-to-b flex from-cyan-300 to-cyan-50 justify-center items-center">
     <div>
-        <h1>Sentyment analysis</h1>
-        <div>
+        <h1>Sentiment analysis</h1>
+        <div class>
             <input on:input={onUrlChange} bind:value={url} placeholder="Insert url" class="p-3 rounded-full">
             <button on:click={handleClick}>Add</button>
         </div>

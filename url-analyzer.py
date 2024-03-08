@@ -1,5 +1,6 @@
 #NLP libraries
 import spacy
+from spacy.matcher import Matcher
 from sentiment_analysis_spanish import sentiment_analysis
 
 nlp = spacy.load('es_core_news_sm')
