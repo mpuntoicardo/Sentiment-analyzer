@@ -17,6 +17,10 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 
 
+
+
+from test import CustomThread
+
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
 }
@@ -29,6 +33,8 @@ urls = [
 word = "apple"
 texts = []
 failedUrls = []
+fullArticles = []
+promptTexts = []
 for url in urls:
     response = requests.get(url, headers=headers, cookies=cookies)
     if response.status_code == 200:
@@ -37,12 +43,20 @@ for url in urls:
         with open('Data.txt', 'a', encoding='utf-8') as out_f:
             for paragraph in soup.find_all(['p','h1','h2','h3']):
                 texts.append(paragraph.text)
+                fullArticles.append(paragraph.text)
                 out_f.write(paragraph.text)
                 out_f.write('\n\n')
     else:
         failedUrls.append(url)
         print(response)
         print(f"Failed to retrieve content from {url}")
+    promptTexts.append(" ".join(fullArticles))
+    fullArticles = []
+
+
+thread_gemini_text = CustomThread(promptTexts)
+thread_gemini_text.start()
+    
 
 
 
@@ -159,6 +173,10 @@ axes[1,1].set_title('Phrases with keyword')
 df_PhrasesWithoutKeyword = pd.DataFrame({'Sentimiento':list(sentimentKeyword[0].keys()), 'Cantidad': list(sentimentKeyword[0].values())})
 df_PhrasesWithoutKeyword.plot.bar(x='Sentimiento',y='Cantidad', rot = 0,ax=axes[1,2], color=colors)
 axes[1,2].set_title('Phrases without keyword')
+
+thread_gemini_text.join()
+
+print(thread_gemini_text.value)
 
 
 plt.tight_layout()
