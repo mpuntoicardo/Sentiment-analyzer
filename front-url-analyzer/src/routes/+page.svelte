@@ -1,5 +1,7 @@
 <script>
-    import '../app.css'
+    import image from '$lib/assets/Scenes05.svg'
+
+
     export let urls = []
     let url = ''
     function onUrlChange({target: t}){
@@ -12,18 +14,21 @@
 </script>
 
 
-<div class="min-h-screen flex justify-center items-center background">
-    <div class="backdrop-blur-sm p-5 bg-white/30 rounded-md">
+<div class="min-h-screen flex justify-center items-center background static">
+    <div class="backdrop-blur-sm p-5 bg-white/30 rounded-md z-10 w-1/3">
         <div class="flex justify-center mb-3">
-            <h1>Sentiment analysis</h1>
+            <h1 class="text-2xl text-white">Sentiment analysis</h1>
         </div>
-        <div class>
-            <input on:input={onUrlChange} bind:value={url} placeholder="Insert url" class="p-3 rounded-full">
+        <div class="flex justify-center">
+            <input on:input={onUrlChange} bind:value={url} placeholder="Insert url" class="p-3 rounded-full w-100">
             <button on:click={handleClick}>Add</button>
         </div>
         {#each urls as url, index}
             <p>{index+1} - {url}</p>
         {/each}
+    </div>
+    <div class="absolute bottom-0 -left-10 z-0 w-3/5 h-100">
+        <img src={image} alt="alt" class="object-contain"/>
     </div>
 </div>
 
