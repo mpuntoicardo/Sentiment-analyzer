@@ -8,16 +8,18 @@
         url = t.value
     }
     function handleClick(){
-        urls = [...urls, url]
+        if(url !== ''){
+            urls = [...urls, url]
+        }
         url = ''
     }
 </script>
 
 
 <div class="min-h-screen flex justify-center items-center background static">
-    <div class="backdrop-blur-sm p-5 bg-white/30 rounded-md z-10 w-1/3">
+    <div class="backdrop-blur-sm p-6 bg-white/50 rounded-md z-10 w-1/3">
         <div class="flex justify-center mb-3">
-            <h1 class="text-2xl text-white">Sentiment analysis</h1>
+            <h1 class="text-6xl text-white">Sentiment analysis</h1>
         </div>
         <div class="flex justify-center">
             <input on:input={onUrlChange} bind:value={url} placeholder="Insert url" class="p-3 rounded-full w-100">
