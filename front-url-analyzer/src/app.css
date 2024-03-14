@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 
-h1,h2,p{
+h1,h2,p, button, input{
     font-family: 'Poppins'
 }
