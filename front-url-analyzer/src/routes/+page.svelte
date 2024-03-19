@@ -26,6 +26,13 @@
 
     }
 
+    function handleDeleteUrl({target: t}){
+        const urlToDelete = t.parentNode.children[1].innerHTML
+        urls = urls.filter((el)=>{
+            return el !== urlToDelete
+        })
+    }
+
 </script>
 
 
@@ -41,7 +48,7 @@
         {#if urls.length}
         <div class="max-h-48 overflow-auto px-8 shadow-inner">
             {#each urls as url, index}
-               <Url url={url} index={index}/>
+               <Url url={url} index={index} handleDeleteUrl={handleDeleteUrl}/>
             {/each}
         </div>
         {/if}

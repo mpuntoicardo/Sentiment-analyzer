@@ -17,7 +17,7 @@
         
         <!-- Input Field + Error Message -->
         <div class="col-span-8">
-            <input bind:value={inputValue} placeholder={placeholder} class="p-4 rounded-l-full bg-white w-full">
+            <input bind:value={inputValue} placeholder={placeholder} class="p-4 rounded-l-full bg-white w-full focus:outline-none focus:ring focus:ring-cyan-500/50">
         </div>
         
         <!-- Button -->
