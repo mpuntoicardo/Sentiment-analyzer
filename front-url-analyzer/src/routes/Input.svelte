@@ -3,18 +3,42 @@
     export let inputValue = ''
     export let handleClick
     export let label
+    export let showErrorUrl
 </script>
 
-
-<div class="flex justify-center items-center w-full p-3">
-    <p class="w-2/12 text-md text-cyan-800"><strong>{label}</strong></p>
-    <input bind:value={inputValue} placeholder={placeholder} class="p-4 rounded-l-full w-8/12 bg-white">
-    <button on:click={handleClick} class="rounded-r-full text-white rounded-l-lg p-4 text-md w-max bg-blue-500 h-4/6">Add</button>
+<div class="w-full">
+    <div class="grid grid-cols-12 items-center p-3">
+        <!-- Label -->
+        <div class="col-span-2">
+           <p class="text-md text-cyan-800">
+            <strong >{label}</strong>
+           </p> 
+        </div>
+        
+        <!-- Input Field + Error Message -->
+        <div class="col-span-8">
+            <input bind:value={inputValue} placeholder={placeholder} class="p-4 rounded-l-full bg-white w-full">
+        </div>
+        
+        <!-- Button -->
+        <div class="col-span-2">
+            <button on:click={handleClick} class="rounded-r-full text-white rounded-l-lg p-4 text-md bg-blue-500">Add</button>
+        </div>
+        <div class="col-start-3 col-span-8 h-6">
+            {#if showErrorUrl}
+                <p class="mt-2 ml-3 errorMessage">Urls can't have spaces</p>
+            {/if}
+        </div>
+    </div>
 </div>
+
 
 
 <style>
     p{
         color:rgb(63,94,251)
+    }
+    .errorMessage{
+        color: rgba(220, 38, 38, 1);
     }
 </style>

@@ -7,12 +7,18 @@
 
     export let urls = []
     let url = ''
+    let showErrorUrl = false
     function handleClickUrlInput(){
         url = url.trim()
-        if(url !== ''){
-            urls = [...urls, url]
+        if(url.split(' ').length>1){
+            showErrorUrl = true
+        }else{
+            if(url !== ''){
+                urls = [...urls, url]
+            }
+            url = ''
+            showErrorUrl = false
         }
-        url = ''
     }
 
     let keyWord = ''
@@ -29,7 +35,7 @@
             <h1 class="text-6xl text-cyan-800"><strong>Sentiment Analysis</strong></h1>
         </div>
         <div class="flex flex-col">
-            <Input label="Urls" placeholder="e.g. www.example.com" bind:inputValue={url} handleClick={handleClickUrlInput}/>
+            <Input label="Urls" placeholder="e.g. www.example.com" bind:inputValue={url} handleClick={handleClickUrlInput} showErrorUrl={showErrorUrl}/>
             <Input label="Keyword" placeholder="e.g. Apple, Zara ..." bind:inputValue={keyWord} handleClick={handleClickKeyWord}/>
         </div>
         {#if urls.length}
