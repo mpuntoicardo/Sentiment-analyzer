@@ -2,8 +2,11 @@
     export let placeholder
     export let inputValue = ''
     export let handleClick
+    export let handleKeyUp
     export let label
     export let showErrorUrl
+    export let disabled = false
+    export let buttonValue = "Add"
 </script>
 
 <div class="w-full">
@@ -17,12 +20,12 @@
         
         <!-- Input Field + Error Message -->
         <div class="col-span-8">
-            <input bind:value={inputValue} placeholder={placeholder} class="p-4 rounded-l-full bg-white w-full focus:outline-none focus:ring focus:ring-cyan-500/50">
+            <input disabled={disabled} bind:value={inputValue} on:keyup|preventDefault={handleKeyUp} placeholder={placeholder} class="p-4 rounded-l-full bg-white w-full focus:outline-none focus:ring focus:ring-cyan-500/50 border-white border disabled:bg-slate-200 disabled:text-slate-500 disabled:border-slate-200">
         </div>
         
         <!-- Button -->
         <div class="col-span-2">
-            <button on:click={handleClick} class="rounded-r-full text-white rounded-l-lg p-4 text-md bg-blue-500">Add</button>
+            <button on:click={handleClick} class="w-8/12 rounded-r-full text-white rounded-l-lg p-4 text-md bg-blue-500 hover:bg-blue-800 hover:border border border-blue-500 transition hover:border-blue-800">{buttonValue}</button>
         </div>
         <div class="col-start-3 col-span-8 h-6">
             {#if showErrorUrl}

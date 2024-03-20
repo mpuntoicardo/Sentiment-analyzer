@@ -20,10 +20,28 @@
             showErrorUrl = false
         }
     }
+    function handleKeyUpUrl(){
+        if (event.code == 'Enter') {
+			event.preventDefault()
+            handleClickUrlInput()
+			return false
+		}
+    }
 
     let keyWord = ''
+    let disableKeyWord = false
     function handleClickKeyWord(){
-
+        keyWord = keyWord.trim()
+        if(keyWord!=''){
+            disableKeyWord = !disableKeyWord
+        }
+    }
+    function handleKeyUpKeyWord(){
+        if (event.code == 'Enter' || event.code == 'Space') {
+			event.preventDefault()
+            handleClickKeyWord()
+			return false
+		}
     }
 
     function handleDeleteUrl({target: t}){
@@ -39,11 +57,11 @@
 <div class="min-h-screen flex flex-col justify-start items-center background pt-[50vh] static">
     <div class="backdrop-blur-sm p-6 bg-white/50 rounded-md z-10 w-2/4 mt-[-25vh] mb-24 shadow-lg flex flex-col ">
         <div class="flex justify-center mb-3">
-            <h1 class="text-6xl text-cyan-800"><strong>Sentiment Analysis</strong></h1>
+            <h1 class="text-5xl text-cyan-800"><strong>Sentiment Analysis</strong></h1>
         </div>
         <div class="flex flex-col">
-            <Input label="Urls" placeholder="e.g. www.example.com" bind:inputValue={url} handleClick={handleClickUrlInput} showErrorUrl={showErrorUrl}/>
-            <Input label="Keyword" placeholder="e.g. Apple, Zara ..." bind:inputValue={keyWord} handleClick={handleClickKeyWord}/>
+            <Input label="Urls" placeholder="e.g. www.example.com" bind:inputValue={url} handleClick={handleClickUrlInput} showErrorUrl={showErrorUrl} handleKeyUp={handleKeyUpUrl}/>
+            <Input label="Keyword" placeholder="e.g. Apple, Zara ..." bind:inputValue={keyWord} handleClick={handleClickKeyWord} disabled={disableKeyWord} buttonValue={disableKeyWord? "Edit":"Add"} handleKeyUp={handleKeyUpKeyWord}/>
         </div>
         {#if urls.length}
         <div class="max-h-48 overflow-auto px-8 shadow-inner">
