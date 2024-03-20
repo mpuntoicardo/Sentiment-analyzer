@@ -4,7 +4,8 @@
     import Input from './Input.svelte'
     import Url from './url.svelte';
 
-
+    
+    
     export let urls = []
     let url = ''
     let showErrorUrl = false
@@ -22,12 +23,12 @@
     }
     function handleKeyUpUrl(){
         if (event.code == 'Enter') {
-			event.preventDefault()
+            event.preventDefault()
             handleClickUrlInput()
 			return false
 		}
     }
-
+    
     let keyWord = ''
     let disableKeyWord = false
     function handleClickKeyWord(){
@@ -38,19 +39,19 @@
     }
     function handleKeyUpKeyWord(){
         if (event.code == 'Enter' || event.code == 'Space') {
-			event.preventDefault()
+            event.preventDefault()
             handleClickKeyWord()
 			return false
 		}
     }
-
+    
     function handleDeleteUrl({target: t}){
         const urlToDelete = t.parentNode.children[1].innerHTML
         urls = urls.filter((el)=>{
             return el !== urlToDelete
         })
     }
-
+    
 </script>
 
 
@@ -64,10 +65,13 @@
             <Input label="Keyword" placeholder="e.g. Apple, Zara ..." bind:inputValue={keyWord} handleClick={handleClickKeyWord} disabled={disableKeyWord} buttonValue={disableKeyWord? "Edit":"Add"} handleKeyUp={handleKeyUpKeyWord}/>
         </div>
         {#if urls.length}
-        <div class="max-h-48 overflow-auto px-8 shadow-inner">
+        <div class="max-h-40 overflow-auto px-8 shadow-inner">
             {#each urls as url, index}
                <Url url={url} index={index} handleDeleteUrl={handleDeleteUrl}/>
             {/each}
+        </div>
+        <div class="flex justify-center w-full mt-3">
+            <button class="bg-blue-500 rounded-full text-white w-6/12 p-3 hover:bg-blue-800">Compute</button>
         </div>
         {/if}
     </div>

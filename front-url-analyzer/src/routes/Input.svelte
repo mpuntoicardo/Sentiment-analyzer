@@ -29,7 +29,10 @@
         </div>
         <div class="col-start-3 col-span-8 h-6">
             {#if showErrorUrl}
-                <p class="mt-2 ml-3 errorMessage">Urls can't have spaces</p>
+                <div class="flex items-center bg-red-200 p-1 rounded-md mt-2 px-5">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #dc2626;"></i>
+                    <p class="errorMessage ml-2">Urls can't have spaces</p>
+                </div>
             {/if}
         </div>
     </div>
