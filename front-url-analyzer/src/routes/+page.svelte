@@ -51,6 +51,14 @@
             return el !== urlToDelete
         })
     }
+
+    function handleSubmit(){
+        const body={
+            urls,
+            keyWord
+        }
+        console.log(JSON.stringify(body))
+    }
     
 </script>
 
@@ -71,7 +79,7 @@
             {/each}
         </div>
         <div class="flex justify-center w-full mt-3">
-            <button class="bg-blue-500 rounded-full text-white w-6/12 p-3 hover:bg-blue-800">Compute</button>
+            <button on:click={handleSubmit} class="bg-blue-500 rounded-full text-white w-6/12 p-3 hover:bg-blue-800">Compute</button>
         </div>
         {/if}
     </div>

@@ -6,7 +6,8 @@
 
     const scroll = node => {
         node.scrollIntoView()
-    }
+        window.scrollTo(0,0)
+        }
 </script>
 
 
