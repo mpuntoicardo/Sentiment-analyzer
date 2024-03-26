@@ -24,7 +24,7 @@ headers = {
 cookies = {
 }
 
-def analyzeUrls(urls, keyword = None) -> dict:
+def analyzeUrls(urls, keyword = None, singleUrl = False) -> dict:
     texts = []
     failedUrls = []
     fullArticles = []
@@ -48,12 +48,10 @@ def analyzeUrls(urls, keyword = None) -> dict:
         promptTexts.append(" ".join(fullArticles))
         fullArticles = []
 
-
-    thread_gemini_text = CustomThread(promptTexts)
-    thread_gemini_text.start()
+    if not singleUrl:
+        thread_gemini_text = CustomThread(promptTexts)
+        thread_gemini_text.start()
         
-
-
 
     #Phrases with KeyWord
     phrasesKeyword = {
@@ -64,7 +62,7 @@ def analyzeUrls(urls, keyword = None) -> dict:
     entitiesCount={}
     #Procesamos los textos de las webs con spacy
     docs = [doc for doc in nlp.pipe(texts)]
-    #Almacenamos las frases una vez lematizadas y si contienen o no la frase formato
+    #Almacenamos las frases una vez lematizadas y si contienen o no el keyword
     # Formato : [0/1,frase]
     # 0 Indica que no contiene
     # 1 Indica que si contiene
@@ -103,6 +101,7 @@ def analyzeUrls(urls, keyword = None) -> dict:
     #print(sentiment_results)
 
     sent_class_arr = []
+    #Guarda resultado global
     labToVal = {}
     sentimentKeyword = {
         0: defaultdict(int),
@@ -134,9 +133,10 @@ def analyzeUrls(urls, keyword = None) -> dict:
     #Contiene Keyword
     print(sentimentKeyword[1])
 
-    thread_gemini_text.join()
-
-    print(thread_gemini_text.value)
+    if not singleUrl:
+        thread_gemini_text.join()
+        print(thread_gemini_text.value)
+    
     return {
         'globalResults': labToVal, 
         'phraseContainsKeyword': {
@@ -146,5 +146,5 @@ def analyzeUrls(urls, keyword = None) -> dict:
         },
         'entitiesSpotted': entitiesCount,
         'failedUrls': failedUrls,
-        'summary':  thread_gemini_text.value
+        'summary': thread_gemini_text.value if not singleUrl else None,
         }

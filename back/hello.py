@@ -8,9 +8,9 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 
-@app.route("/", methods=['POST'])
+@app.route("/urlsAnalyzer", methods=['POST'])
 @cross_origin()
-def hello_world():
+def urlsAnalysis():
     data = request.get_json()
     if not data:
         return jsonify({"error": "No JSON data provided"}), 400
@@ -21,6 +21,19 @@ def hello_world():
     if not keyword:
         keyword=''
     results = analyzeUrls(urls, keyword)
+    return jsonify(results), 200
 
-
+@app.route("/singleUrlAnalyzer", methods=['POST'])
+@cross_origin()
+def singleUrlAnalysis():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No JSON data provided"}), 400
+    url = data.get('url')
+    if not url:
+        return jsonify({"error": "No url provided, bad request"}), 400
+    keyword = data.get('keyword')
+    if not keyword:
+        keyword=''
+    results = analyzeUrls([url], keyword, True)
     return jsonify(results), 200
