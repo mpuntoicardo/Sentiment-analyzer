@@ -7,6 +7,8 @@
     export let showErrorUrl
     export let disabled = false
     export let buttonValue = "Add"
+
+    import ErrorMessage from "../lib/Components/errorMessage.svelte";
 </script>
 
 <div class="w-full">
@@ -29,10 +31,7 @@
         </div>
         <div class="col-start-3 col-span-8 h-6">
             {#if showErrorUrl}
-                <div class="flex items-center bg-red-200 p-1 rounded-md mt-2 px-5">
-                    <i class="fa-solid fa-triangle-exclamation" style="color: #dc2626;"></i>
-                    <p class="errorMessage ml-2">Urls can't have spaces</p>
-                </div>
+                <ErrorMessage msg = {'Urls can not have spaces'}/>
             {/if}
         </div>
     </div>
@@ -43,8 +42,5 @@
 <style>
     p{
         color:rgb(63,94,251)
-    }
-    .errorMessage{
-        color: rgba(220, 38, 38, 1);
     }
 </style>

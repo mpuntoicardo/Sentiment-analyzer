@@ -4,6 +4,7 @@
     import Input from './Input.svelte'
     import LoadingSpinner from './loadingSpinner.svelte';
     import Url from './url.svelte';
+    import ErrorMessage from '../lib/Components/errorMessage.svelte';
 
     
     
@@ -54,23 +55,29 @@
     }
 
     let showLoadingSpinner = false
-
+    let showErrorApi = false
     async function handleSubmit(){
         const body={
             urls,
             keyWord
         }
         showLoadingSpinner = true
-        const response = await fetch('http://127.0.0.1:5000',{
-            method: "POST",
-            mode: "cors",
-            headers:{
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body)
-        })
-        const data = await response.json()
-        console.log(data)
+        showErrorApi = false
+        try{
+            const response = await fetch('http://127.0.0.1:5000',{
+                method: "POST",
+                mode: "cors",
+                headers:{
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(body)
+            })
+            const data = await response.json()
+            console.log(data)
+        }catch(Error){
+            showLoadingSpinner = false
+            showErrorApi = true
+        }
     }
     
 </script>
@@ -97,6 +104,9 @@
                 <div class="mt-2">
                     <LoadingSpinner/>
                 </div>
+            {/if}
+            {#if showErrorApi}
+                <ErrorMessage msg={'Error connecting to server'}/>
             {/if}
         </div>
         {/if}
