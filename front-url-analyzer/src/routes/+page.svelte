@@ -2,6 +2,7 @@
     import image from '$lib/assets/Scenes05.svg'
 
     import Input from './Input.svelte'
+    import LoadingSpinner from './loadingSpinner.svelte';
     import Url from './url.svelte';
 
     
@@ -52,11 +53,14 @@
         })
     }
 
+    let showLoadingSpinner = false
+
     async function handleSubmit(){
         const body={
             urls,
             keyWord
         }
+        showLoadingSpinner = true
         const response = await fetch('http://127.0.0.1:5000',{
             method: "POST",
             mode: "cors",
@@ -73,7 +77,7 @@
 
 
 <div class="min-h-screen flex flex-col justify-start items-center background pt-[50vh] static">
-    <div class="backdrop-blur-sm p-6 bg-white/50 rounded-md z-10 w-2/4 mt-[-25vh] mb-24 shadow-lg flex flex-col ">
+    <div class="backdrop-blur-sm p-6 bg-white/50 rounded-md z-10 w-2/4 mt-[-30vh] mb-24 shadow-lg flex flex-col ">
         <div class="flex justify-center mb-3">
             <h1 class="text-5xl text-cyan-800"><strong>Sentiment Analysis</strong></h1>
         </div>
@@ -87,8 +91,13 @@
                <Url url={url} index={index} handleDeleteUrl={handleDeleteUrl}/>
             {/each}
         </div>
-        <div class="flex justify-center w-full mt-3">
+        <div class="flex flex-col justify-center items-center w-full mt-3">
             <button on:click={handleSubmit} class="bg-blue-500 rounded-full text-white w-6/12 p-3 hover:bg-blue-800">Compute</button>
+            {#if showLoadingSpinner}
+                <div class="mt-2">
+                    <LoadingSpinner/>
+                </div>
+            {/if}
         </div>
         {/if}
     </div>

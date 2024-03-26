@@ -4,10 +4,21 @@
     export let handleDeleteUrl
 
 
-    const scroll = node => {
-        node.scrollIntoView()
-        window.scrollTo(0,0)
+    const scroll = async (node) => {
+       // Save the current scroll position
+        const originalScrollPosition = window.scrollY;
+        
+        node.scrollIntoView();
+
+        // Wait for the next frame to allow the DOM to update
+        await new Promise(resolve => requestAnimationFrame(resolve));
+
+        // Check if the scroll position has changed unexpectedly after adding the node
+        if (window.scrollY !== originalScrollPosition) {
+                // Restore the scroll position, adjust as necessary to accommodate the new content
+                window.scrollTo(0, originalScrollPosition);
         }
+    }
 </script>
 
 
