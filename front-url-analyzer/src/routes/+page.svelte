@@ -6,7 +6,8 @@
     import Url from './url.svelte';
     import ErrorMessage from '../lib/Components/errorMessage.svelte';
 
-    
+    import { store } from './store.js'
+  import Results from './results.svelte';
     
     export let urls = []
     let url = ''
@@ -31,11 +32,11 @@
 		}
     }
     
-    let keyWord = ''
+    let keyword = ''
     let disableKeyWord = false
     function handleClickKeyWord(){
-        keyWord = keyWord.trim()
-        if(keyWord!=''){
+        keyword = keyword.trim()
+        if(keyword!=''){
             disableKeyWord = !disableKeyWord
         }
     }
@@ -56,15 +57,16 @@
 
     let showLoadingSpinner = false
     let showErrorApi = false
+    let showResults = false
     async function handleSubmit(){
         const body={
             urls,
-            keyWord
+            keyword
         }
         showLoadingSpinner = true
         showErrorApi = false
         try{
-            const response = await fetch('http://127.0.0.1:5000',{
+            const response = await fetch('http://127.0.0.1:5000/urlsAnalyzer',{
                 method: "POST",
                 mode: "cors",
                 headers:{
@@ -73,7 +75,9 @@
                 body: JSON.stringify(body)
             })
             const data = await response.json()
-            console.log(data)
+            store.set(data)
+            showLoadingSpinner = false
+            showResults = true
         }catch(Error){
             showLoadingSpinner = false
             showErrorApi = true
@@ -90,7 +94,7 @@
         </div>
         <div class="flex flex-col">
             <Input label="Urls" placeholder="e.g. www.example.com" bind:inputValue={url} handleClick={handleClickUrlInput} showErrorUrl={showErrorUrl} handleKeyUp={handleKeyUpUrl}/>
-            <Input label="Keyword" placeholder="e.g. Apple, Zara ..." bind:inputValue={keyWord} handleClick={handleClickKeyWord} disabled={disableKeyWord} buttonValue={disableKeyWord? "Edit":"Add"} handleKeyUp={handleKeyUpKeyWord}/>
+            <Input label="Keyword" placeholder="e.g. Apple, Zara ..." bind:inputValue={keyword} handleClick={handleClickKeyWord} disabled={disableKeyWord} buttonValue={disableKeyWord? "Edit":"Add"} handleKeyUp={handleKeyUpKeyWord}/>
         </div>
         {#if urls.length}
         <div class="max-h-40 overflow-auto px-8 shadow-inner">
@@ -115,6 +119,9 @@
         <img src={image} alt="alt" class="object-contain"/>
     </div>
 </div>
+{#if showResults}
+    <Results/>
+{/if}
 
 <style lang="postcss">
     .background{
