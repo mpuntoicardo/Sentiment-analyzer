@@ -31,9 +31,9 @@
       label: label,
       data: chartData,
       backgroundColor: [
-        'rgba(255, 134,159,0.4)',
-        'rgba(98,  182, 239,0.4)',
-        'rgba(255, 218, 128,0.4)',
+        'rgba(255, 134,159)',
+        'rgba(98,  182, 239)',
+        'rgba(255, 218, 128)',
       ],
       borderWidth: 2,
       borderColor: [

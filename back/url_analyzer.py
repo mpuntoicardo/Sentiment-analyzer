@@ -133,11 +133,19 @@ def analyzeUrls(urls, keyword = None, singleUrl = False) -> dict:
     #Contiene Keyword
     print(sentimentKeyword[1])
 
+    #Sentiment repeated the most
+    overallSentCoun = 0
+    overallSent = None
+    for key, value in labToVal.items():
+        if value >= overallSentCoun:
+            overallSentCoun = value
+            overallSent = key
+
     if not singleUrl:
         thread_gemini_text.join()
         print(thread_gemini_text.value)
-    
     return {
+        'overallSent': overallSent,
         'globalResults': labToVal, 
         'phraseContainsKeyword': {
             'count':phrasesKeyword,
