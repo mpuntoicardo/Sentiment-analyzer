@@ -31,7 +31,10 @@ def get_chat_response(chat: ChatSession, prompt: str) -> str:
     return " ".join(text_response)
 
 def get_Summary(texts: list)->str:
-    prompt = "A continuación te voy a dar unos textos numerados empezando por el 0. Quiero un resumen en detalle por separado de cada uno de ellos de máximo unas 6 líneas"
-    for index, text in enumerate(texts):
-        prompt+= f'\n {index}:  {text}'
-    return get_chat_response(chat, prompt)
+    if len(texts)>1:
+        prompt = "A continuación te voy a dar unos textos numerados empezando por el 0. Quiero un resumen en detalle por separado de cada uno de ellos de máximo unas 6 líneas"
+        for index, text in enumerate(texts):
+            prompt+= f'\n {index}:  {text}'
+        return get_chat_response(chat, prompt)
+    else:
+        return ''

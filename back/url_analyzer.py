@@ -29,24 +29,27 @@ def analyzeUrls(urls, keyword = None, singleUrl = False) -> dict:
     failedUrls = []
     fullArticles = []
     promptTexts = []
-
     for url in urls:
-        response = requests.get(url, headers=headers, cookies=cookies)
-        if response.status_code == 200:
-            print(response)
-            soup = BeautifulSoup(response.text, 'html.parser')
-            with open('Data.txt', 'a', encoding='utf-8') as out_f:
-                for paragraph in soup.find_all(['p','h1','h2','h3']):
-                    texts.append(paragraph.text)
-                    fullArticles.append(paragraph.text)
-                    out_f.write(paragraph.text)
-                    out_f.write('\n\n')
-        else:
+        try:
+            response = requests.get(url, headers=headers, cookies=cookies)
+            if response.status_code == 200:
+                print(response)
+                soup = BeautifulSoup(response.text, 'html.parser')
+                with open('Data.txt', 'a', encoding='utf-8') as out_f:
+                    for paragraph in soup.find_all(['p','h1','h2','h3']):
+                        texts.append(paragraph.text)
+                        fullArticles.append(paragraph.text)
+                        out_f.write(paragraph.text)
+                        out_f.write('\n\n')
+            else:
+                failedUrls.append(url)
+                print(response)
+                print(f"Failed to retrieve content from {url}")
+            promptTexts.append(" ".join(fullArticles))
+            fullArticles = []
+        except:
             failedUrls.append(url)
-            print(response)
-            print(f"Failed to retrieve content from {url}")
-        promptTexts.append(" ".join(fullArticles))
-        fullArticles = []
+    
 
     if not singleUrl:
         thread_gemini_text = CustomThread(promptTexts)

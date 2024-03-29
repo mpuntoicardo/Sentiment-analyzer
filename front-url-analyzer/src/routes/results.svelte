@@ -1,8 +1,9 @@
 <script>
         import BarChart from '../lib/Components/barChart.svelte';
+        import ErrorMessage from '../lib/Components/errorMessage.svelte';
         import PieChart from '../lib/Components/pieChart.svelte';
         import { store } from './store.js'
-       
+
 </script>
 
 <section id='results-section'>
@@ -15,6 +16,9 @@
             <div class="p-3">
                 <h2>The most repeated sentiment throughout the phrases in the urls is: <b>{$store.overallSent}</b></h2>
             </div>
+            {#if $store.failedUrls.length > 0}
+                <ErrorMessage msg={'Failed to retrieve info from ' + $store.failedUrls.length + " " + ($store.failedUrls.length > 1? "urls" : "url")}></ErrorMessage>
+            {/if}
         </div>
     </div>
     <div class="flex flex-col bg-[#a7d6e2] pb-10 items-center">
