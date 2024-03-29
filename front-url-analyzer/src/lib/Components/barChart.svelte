@@ -21,7 +21,9 @@
     export let chartData = []
     export let label = ''
 
-
+    export let barColor1 = ''
+    export let barColor2 = ''
+    export let barColor3 = ''
 
 </script>
 <Bar data={{
@@ -31,17 +33,32 @@
       label: label,
       data: chartData,
       backgroundColor: [
-        'rgba(255, 134,159)',
-        'rgba(98,  182, 239)',
-        'rgba(255, 218, 128)',
+        barColor1 || '#F7464A',
+        barColor2 || '#FDB45C',
+        barColor3 ||'#67c952',
       ],
       borderWidth: 2,
       borderColor: [
-        'rgba(255, 134, 159, 1)',
-        'rgba(98,  182, 239, 1)',
-        'rgba(255, 218, 128, 1)',
+        barColor1 || '#F7464A',
+        barColor2 || '#FDB45C',
+        barColor3 || '#67c952',
       ],
     },
   ]
 }}
-/>
+
+options={{
+  responsive:true,
+  plugins:{
+      datalabels:{
+          color: '#FFF',
+      },
+      legend:{
+        position:'bottom'
+      }
+  },
+  layout:{
+      padding: 5
+  },
+  events:[]
+}} />
