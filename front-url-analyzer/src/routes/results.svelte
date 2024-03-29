@@ -2,62 +2,67 @@
         import BarChart from '../lib/Components/barChart.svelte';
         import ErrorMessage from '../lib/Components/errorMessage.svelte';
         import PieChart from '../lib/Components/pieChart.svelte';
+        import ErrorResult from './errorResult.svelte';
         import { store } from './store.js'
 
 </script>
 
 <section id='results-section'>
-    <div class="p-10">
-        <div class="flex flex-col items-center gap-y-2">
-            <h1 class="text-5xl">Search results</h1>
-            <div class="w-4/12 flex justify-center">
-                <PieChart labels={Object.keys($store.globalResults)} chartData={Object.values($store.globalResults)}/>
+    {#if $store.overallSent}
+        <div class="p-10">
+            <div class="flex flex-col items-center gap-y-2">
+                <h1 class="text-5xl">Search results</h1>
+                <div class="w-4/12 flex justify-center">
+                    <PieChart labels={Object.keys($store.globalResults)} chartData={Object.values($store.globalResults)}/>
+                </div>
+                <div class="p-3">
+                    <h2>The most repeated sentiment throughout the phrases in the urls is: <b>{$store.overallSent}</b></h2>
+                </div>
+                {#if $store.failedUrls.length > 0}
+                    <ErrorMessage msg={'Failed to retrieve info from ' + $store.failedUrls.length + " " + ($store.failedUrls.length > 1? "urls" : "url")}></ErrorMessage>
+                {/if}
             </div>
-            <div class="p-3">
-                <h2>The most repeated sentiment throughout the phrases in the urls is: <b>{$store.overallSent}</b></h2>
+        </div>
+        <div class="flex flex-col bg-[#a7d6e2] pb-10 items-center">
+            <h2 class="text-3xl pt-10 pb-4">Urls content's summary</h2>
+            <div class="px-32">
+                <p class="pt-4 summary">{$store.summary}</p>
             </div>
-            {#if $store.failedUrls.length > 0}
-                <ErrorMessage msg={'Failed to retrieve info from ' + $store.failedUrls.length + " " + ($store.failedUrls.length > 1? "urls" : "url")}></ErrorMessage>
-            {/if}
         </div>
-    </div>
-    <div class="flex flex-col bg-[#a7d6e2] pb-10 items-center">
-        <h2 class="text-3xl pt-10 pb-4">Urls content's summary</h2>
-        <div class="px-32">
-            <p class="pt-4 summary">{$store.summary}</p>
+        <div class="grid grid-cols-2 pb-10">
+            <div class="col-span-2 pt-10 pb-4">
+                <h2 class="text-3xl text-center">In depth results</h2>
+            </div>
+            <div class="pl-32 pr-10 pt-4">
+                <p class="summary">The following bar chart breaks down the frequency of phrases categorized as <b>Negative(Neg), Neutral(Neu) and Positive(Pos)</b> found within the analyzed URLs. Analyzing the distribution of these phrases can help you gain insights into the specific focus you have. This information can be valuable in these examples: e.g., understanding user interest in a particular aspect, identifying areas for improvement in content related to the category, or analyzing the comprehensiveness of the information provided.</p>
+            </div>
+            <div class="pr-32 pt-4">
+                <BarChart labels={Object.keys($store.globalResults)} label='Phrases count' chartData={Object.values($store.globalResults)}/>
+            </div>
         </div>
-    </div>
-    <div class="grid grid-cols-2 pb-10">
-        <div class="col-span-2 pt-10 pb-4">
-            <h2 class="text-3xl text-center">In depth results</h2>
+        <div class="grid grid-cols-2 pb-10 bg-[#a7d6e2]">
+            <div class="col-span-2 pt-10 pb-4">
+                <!-- Change apple for response coming from api-->
+                <h2 class="text-3xl text-center">Keyword analysis: Apple</h2>
+            </div>
+            <div class="pl-32 pr-10 pt-4">
+                <BarChart labels={Object.keys($store.phraseContainsKeyword.count)} label='Phrases count' chartData={Object.values($store.phraseContainsKeyword.count)} barColor1={'#0f367b'} barColor2={'#0f367b'}/>
+            </div>
+            <div class="pr-32 pt-4">
+                <p class="summary">The following bar chart breaks down the frequency of phrases which include the keyword, marked as <b>YES</b> and those who doesn't, labeled as <b>NO</b>. <br/> The bar charts included below show the sentiment analysis for the phrases with keyword, left chart, and without, right chart.</p>
+            </div>
+            <div class="pl-32 pr-10 pt-4">
+                <h2 class="text-xl text-center pb-4">With keyword</h2>
+                <BarChart labels={Object.keys($store.phraseContainsKeyword.yes)} label='Phrases count' chartData={Object.values($store.phraseContainsKeyword.yes)} />
+            </div>
+            <div class="pr-32 pt-4">
+                <h2 class="text-xl text-center pb-4">Without keyword</h2>
+                <BarChart labels={Object.keys($store.phraseContainsKeyword.no)} label='Phrases count' chartData={Object.values($store.phraseContainsKeyword.no)}/>
+            </div>
         </div>
-        <div class="pl-32 pr-10 pt-4">
-            <p class="summary">The following bar chart breaks down the frequency of phrases categorized as <b>Negative(Neg), Neutral(Neu) and Positive(Pos)</b> found within the analyzed URLs. Analyzing the distribution of these phrases can help you gain insights into the specific focus you have. This information can be valuable in these examples: e.g., understanding user interest in a particular aspect, identifying areas for improvement in content related to the category, or analyzing the comprehensiveness of the information provided.</p>
-        </div>
-        <div class="pr-32 pt-4">
-            <BarChart labels={Object.keys($store.globalResults)} label='Phrases count' chartData={Object.values($store.globalResults)}/>
-        </div>
-    </div>
-    <div class="grid grid-cols-2 pb-10 bg-[#a7d6e2]">
-        <div class="col-span-2 pt-10 pb-4">
-            <!-- Change apple for response coming from api-->
-            <h2 class="text-3xl text-center">Keyword analysis: Apple</h2>
-        </div>
-        <div class="pl-32 pr-10 pt-4">
-            <BarChart labels={Object.keys($store.phraseContainsKeyword.count)} label='Phrases count' chartData={Object.values($store.phraseContainsKeyword.count)} barColor1={'#0f367b'} barColor2={'#0f367b'}/>
-        </div>
-        <div class="pr-32 pt-4">
-            <p class="summary">The following bar chart breaks down the frequency of phrases which include the keyword, marked as <b>YES</b> and those who doesn't, labeled as <b>NO</b>. <br/> The bar charts included below show the sentiment analysis for the phrases with keyword, left chart, and without, right chart.</p>
-        </div>
-        <div class="pl-32 pr-10 pt-4">
-            <h2 class="text-xl text-center pb-4">With keyword</h2>
-            <BarChart labels={Object.keys($store.phraseContainsKeyword.yes)} label='Phrases count' chartData={Object.values($store.phraseContainsKeyword.yes)} />
-        </div>
-        <div class="pr-32 pt-4">
-            <h2 class="text-xl text-center pb-4">Without keyword</h2>
-            <BarChart labels={Object.keys($store.phraseContainsKeyword.no)} label='Phrases count' chartData={Object.values($store.phraseContainsKeyword.no)}/>
-        </div>
-    </div>
+    {:else}
+        <ErrorResult></ErrorResult>
+    {/if}
 </section>
 
 <style>

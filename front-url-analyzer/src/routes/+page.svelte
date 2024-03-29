@@ -7,8 +7,8 @@
     import ErrorMessage from '../lib/Components/errorMessage.svelte';
 
     import { store } from './store.js'
-  import Results from './results.svelte';
-    
+    import Results from './results.svelte';  
+
     export let urls = []
     let url = ''
     let showErrorUrl = false
