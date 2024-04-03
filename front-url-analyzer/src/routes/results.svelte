@@ -60,6 +60,23 @@
                 <BarChart labels={Object.keys($store.phraseContainsKeyword.no)} label='Phrases count' chartData={Object.values($store.phraseContainsKeyword.no)}/>
             </div>
         </div>
+        <div class="grid grid-cols-2 pb-10">
+            <div class="col-span-2 pt-10 pb-4">
+                <h2 class="text-3xl text-center">Entities spotted</h2>
+            </div>
+            <div class="pl-32 pr-10 pt-4">
+                <p class="summary">Next you can find the frequency of different entities spotted in the urls provided. A named entity is a “real-world object” that’s assigned a name – for example, a person, a country, a product or a book title. They are categorized as follow:</p>
+                <ul class="list-disc pt-3 pl-4">
+                    <li><b>MISC: </b>Various</li>
+                    <li><b>LOC: </b>Geopolitical entity, i.e. countries, cities, states.</li>
+                    <li><b>ORG: </b>Companies, agencies, institutions.</li>
+                    <li><b>PER: </b>People including fictional </li>
+                </ul>
+            </div>
+            <div class="pr-32 pt-4">
+                <BarChart labels={Object.keys($store.entitiesSpotted)} label='Entitie count' chartData={Object.values($store.entitiesSpotted)} barColor1="#39bcf4" barColor2="#39bcf4" barColor3="#39bcf4" datalabelColor="#000000"/>
+            </div>
+        </div>
     {:else}
         <ErrorResult></ErrorResult>
     {/if}

@@ -24,7 +24,9 @@
     export let barColor1 = ''
     export let barColor2 = ''
     export let barColor3 = ''
+    export let barColor4 = ''
 
+    export let datalabelColor =''
 </script>
 <Bar data={{
     labels,
@@ -36,6 +38,7 @@
         barColor1 || '#F7464A',
         barColor2 || '#FDB45C',
         barColor3 ||'#67c952',
+        barColor4,
       ],
       borderWidth: 2,
       borderColor: [
@@ -51,7 +54,7 @@ options={{
   responsive:true,
   plugins:{
       datalabels:{
-          color: '#FFF',
+          color: datalabelColor || '#FFF',
       },
       legend:{
         position:'bottom'
