@@ -125,16 +125,16 @@
 
 
 <div class="min-h-screen flex flex-col justify-start items-center background pt-[50vh] static">
-    <div class="backdrop-blur-sm p-6 bg-white/50 rounded-md z-10 w-2/4 mt-[-30vh] mb-24 shadow-lg flex flex-col ">
+    <div class="backdrop-blur-sm p-3 sm:p-6 bg-white/50 rounded-md z-10 w-2/4 mt-[-30vh] mb-24 shadow-lg flex flex-col w-full md:w-9/12 lg:w-6/12 ">
         <div class="flex justify-center mb-3">
-            <h1 class="text-5xl text-cyan-800"><strong>Sentiment Analysis</strong></h1>
+            <h1 class="text-5xl text-center text-cyan-800"><strong>Sentiment Analysis</strong></h1>
         </div>
         <div class="flex flex-col">
             <Input label="Urls" placeholder="e.g. www.example.com" bind:inputValue={url} handleClick={handleClickUrlInput} showErrorUrl={showErrorUrl} handleKeyUp={handleKeyUpUrl}/>
             <Input label="Keyword" placeholder="e.g. Apple, Zara ..." bind:inputValue={keyword} handleClick={handleClickKeyWord} disabled={disableKeyWord} buttonValue={disableKeyWord? "Edit":"Add"} handleKeyUp={handleKeyUpKeyWord}/>
         </div>
         {#if urls.length}
-        <div class="max-h-40 overflow-auto px-8 shadow-inner">
+        <div class="max-h-40 overflow-auto px-4 sm:px-8 shadow-inner">
             {#each urls as url, index}
                <Url url={url} index={index} handleDeleteUrl={handleDeleteUrl}/>
             {/each}
@@ -152,7 +152,7 @@
         </div>
         {/if}
     </div>
-    <div class="absolute bottom-0 -left-32 z-0 w-3/5 h-100">
+    <div class="absolute bottom-0 -left-32 z-0 md:w-3/5 h-100">
         <img src={image} alt="alt" class="object-contain"/>
     </div>
 </div>
