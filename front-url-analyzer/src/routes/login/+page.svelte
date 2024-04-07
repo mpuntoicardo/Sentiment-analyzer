@@ -73,8 +73,8 @@
             <h2 class="w-full text-xl text-center">Sentiment analysis</h2>
         </div>
             <form class="w-full p-10" on:submit|preventDefault={handleSubmit}>
-                <LoginRegisterInput handleInput={handleInput} error={errorEmail} width="w-full" padding="pb-4" id="email" type="text" label="Email:" placeholder="e.g: alumno@alumnos.upm.es"></LoginRegisterInput>
-                <LoginRegisterInput handleInput={handleInput} error={errorPassword} width="w-full" padding="pb-3" id="password" type="password" label="Password:" placeholder="*********"></LoginRegisterInput>
+                <LoginRegisterInput handleInput={handleInput} error={errorEmail} width="w-full" padding="pb-4" id="email" type="text" label="Email" placeholder="e.g: alumno@alumnos.upm.es"></LoginRegisterInput>
+                <LoginRegisterInput handleInput={handleInput} error={errorPassword} width="w-full" padding="pb-3" id="password" type="password" label="Password" placeholder="*********"></LoginRegisterInput>
                 <p class="text-sm text-blue-600 hover:text-blue-900 cursor-pointer">Forgot password?</p>
                 <div class="max-h-12 h-full">
                     {#if showError}
