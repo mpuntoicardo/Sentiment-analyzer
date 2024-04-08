@@ -13,7 +13,6 @@ export const authenticateUser = async(event)=>{
         if(response.ok){
             const data = await response.json()
             const {user} = data
-            console.log(user)
             return user
         }else{
             return null

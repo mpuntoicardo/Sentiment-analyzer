@@ -24,11 +24,8 @@ model = GenerativeModel("gemini-1.0-pro")
 chat = model.start_chat()
 
 def get_chat_response(chat: ChatSession, prompt: str) -> str:
-    text_response = []
-    responses = chat.send_message(prompt, stream=True)
-    for chunk in responses:
-        text_response.append(chunk.text)
-    return " ".join(text_response)
+    response = chat.send_message(prompt)
+    return response.candidates[0].content.parts[0]._raw_part.text
 
 def get_Summary(texts: list)->str:
     if len(texts)>1:
