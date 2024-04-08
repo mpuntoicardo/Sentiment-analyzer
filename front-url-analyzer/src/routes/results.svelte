@@ -23,7 +23,7 @@
                 {/if}
             </div>
         </div>
-        <div class="flex flex-col bg-[#a7d6e2] pb-10 items-center">
+        <div class="flex flex-col bg-[#Dde2fd] pb-10 items-center">
             <h2 class="text-3xl pt-10 pb-4">Urls content's summary</h2>
             <div class="md:px-32 px-5">
                 <p class="pt-4 summary">{$store.summary}</p>
@@ -40,7 +40,7 @@
                 <BarChart labels={Object.keys($store.globalResults)} label='Phrases count' chartData={Object.values($store.globalResults)}/>
             </div>
         </div>
-        <div class="grid grid-cols-2 pb-10 bg-[#a7d6e2] px-5 md:px-0">
+        <div class="grid grid-cols-2 pb-10 bg-[#Dde2fd] px-5 md:px-0">
             <div class="col-span-2 pt-10 pb-4 order-first">
                 <!-- Change apple for response coming from api-->
                 <h2 class="text-3xl text-center">Keyword analysis: Apple</h2>

@@ -11,5 +11,5 @@
 
 <div class={width +" "+ padding}>
     <label class="block w-full mb-2 text-gray-700 font-bold" for={id}>{label}</label>
-    <input on:input={handleInput} class={"block w-full border appearance-none  px-2 py-2 rounded shadow focus:outline-none focus:bg-gray-200 " + (error? "border-red-500":"")} type={type} placeholder={placeholder} id={id}>
+    <input on:input={handleInput} name={id} class={"block w-full border appearance-none  px-2 py-2 rounded shadow focus:outline-none focus:bg-gray-200 " + (error? "border-red-500":"")} type={type} placeholder={placeholder} id={id}>
 </div>

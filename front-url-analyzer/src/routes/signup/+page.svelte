@@ -107,9 +107,9 @@
     <img src={image} alt="alt" class="object-contain"/>
 </div>
 <div class="flex flex-col sm:w-1/3 w-full">
-    <div class="flex flex-col w-full gap-5 pt-10">
-        <h1 class="text-5xl text-center w-full font-bold">Signup</h1>
-        <h2 class="w-full text-xl text-center">Sentiment analysis</h2>
+    <div class="flex flex-col w-full gap-2 pt-10">
+        <h1 class="text-4xl text-center w-full font-bold">Sign up</h1>
+        <h2 class="w-full text-md text-center tracking-widest">SENTIMENT ANALYSIS</h2>
     </div>
         <form class="w-full px-10 py-5" on:submit|preventDefault={handleSubmit}>
             <div class="flex justify-between flex-col md:flex-row">
