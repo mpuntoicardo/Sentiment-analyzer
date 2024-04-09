@@ -3,6 +3,10 @@ from flask_cors import CORS, cross_origin
 
 from url_analyzer import analyzeUrls
 
+from producer import publish
+
+import requests, json
+
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -37,6 +41,15 @@ def urlsAnalysis():
     result = collection.insert_one(results)
     if '_id' in results:
         results['_id'] = str(results['_id'])
+    headers = request.headers['Authorization']
+    #Comprobar que los headers enviados en la request son correctos
+    if headers and len(headers.split())>1:
+        isValidToken = requests.get('http://127.0.0.1:8000/test_token', headers={'Authorization': headers})
+        #Validamos con el microservicio de django que sea un token valido
+        if isValidToken.ok:
+            #Pasamos de Json a dict
+            contentDict = json.loads(isValidToken.content)
+            publish({"id": results._id, "userId": contentDict['user']['id']})
     return jsonify(results), 200
 
 @app.route("/singleUrlAnalyzer", methods=['POST'])
