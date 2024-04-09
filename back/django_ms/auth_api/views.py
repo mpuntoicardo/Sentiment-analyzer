@@ -6,6 +6,7 @@ from .serializers import UserSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
 
 
 from rest_framework.decorators import authentication_classes, permission_classes
@@ -43,6 +44,16 @@ def signup(request):
 @permission_classes([IsAuthenticated])
 def test_token(request):
     return Response({"message":"Token correctly verified", "user":{
+        "email": request.user.email,
+        "id": request.user.id
+    }})
+
+@api_view(['DELETE'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def logout_view(request):
+    request.user.auth_token.delete()
+    return Response({"message":"User logged out correctly", "user":{
         "email": request.user.email,
         "id": request.user.id
     }})
