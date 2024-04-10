@@ -21,7 +21,6 @@ def login(request):
     if not user.check_password(str(request.data['password'])):
         return Response({"message": "Invalid email or password"}, status=status.HTTP_400_BAD_REQUEST)
     token, created = Token.objects.get_or_create(user=user)
-
     return Response({"message":"Login succesful","token": token.key}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])

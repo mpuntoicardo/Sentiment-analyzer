@@ -7,6 +7,8 @@ from producer import publish
 
 import requests, json
 
+import time
+
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -49,7 +51,7 @@ def urlsAnalysis():
         if isValidToken.ok:
             #Pasamos de Json a dict
             contentDict = json.loads(isValidToken.content)
-            publish({"id": results._id, "userId": contentDict['user']['id']})
+            publish({"result_id": results['_id'], "userId": contentDict['user']['id'], "urls": urls,"keyword": keyword, 'name':data.get('name') if data.get('name') else int(time.time()*1000) })
     return jsonify(results), 200
 
 @app.route("/singleUrlAnalyzer", methods=['POST'])
