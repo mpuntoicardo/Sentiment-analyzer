@@ -68,3 +68,16 @@ def get_search_id(request):
     searchs = Search.objects.filter(created_by=userId)
     serializer = SearchSerializer(searchs, many=True)
     return Response({"message": "Searchs found correctly", "searchs": serializer.data})
+
+#Turns a search from favorite to not and vice versa
+@api_view(['PATCH'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def update_search_is_favorite(request, id):
+    userId = request.user.id
+    user = User.objects.get(id = userId)
+    search = get_object_or_404(Search, created_by= userId, id= id)
+    search.is_favorite = None if search.is_favorite is not None else user
+    search.save()
+    serializer = SearchSerializer(search)
+    return Response({"message":"Search updated successfully", "search": serializer.data})
