@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 
-from .serializers import UserSerializer
+from .serializers import UserSerializer, SearchSerializer, UrlSerializer, KeywordSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
@@ -14,6 +14,8 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404
+
+from .models import Search
 
 @api_view(['POST'])
 def login(request):
@@ -44,7 +46,8 @@ def signup(request):
 def test_token(request):
     return Response({"message":"Token correctly verified", "user":{
         "email": request.user.email,
-        "id": request.user.id
+        "id": request.user.id,
+        "name": request.user.first_name
     }})
 
 @api_view(['DELETE'])
@@ -56,3 +59,12 @@ def logout_view(request):
         "email": request.user.email,
         "id": request.user.id
     }})
+
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_search_id(request):
+    userId = request.user.id
+    searchs = Search.objects.filter(created_by=userId)
+    serializer = SearchSerializer(searchs, many=True)
+    return Response({"message": "Searchs found correctly", "searchs": serializer.data})
