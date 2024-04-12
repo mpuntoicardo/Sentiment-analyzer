@@ -1,9 +1,21 @@
 <script>
     import { tick, onDestroy } from 'svelte';
+    import {createSearchStore, searchHandler} from '$lib/stores/search'
     export let data;
 
     const {user} = data
-    let {searchs}  = data
+    let searchProducts  = data.searchs.map((search)=>({
+        ...search,
+        searchTerms: `${search.name}`
+    }))
+
+    const searchStore = createSearchStore(searchProducts)
+
+    const unsubscribe = searchStore.subscribe((model)=>searchHandler(model))
+
+    onDestroy(()=>{
+        unsubscribe()
+    })
 
     //Allows to keep track of the different inputs and focus and defocus the correct one
     let inputs = []
@@ -49,20 +61,6 @@
             }
         }
     }
-
-    let selectedOption = 'All'
-    //To keep track of initial values
-    let auxArr = []
-    const handleOptionChange = ()=>{
-        if(selectedOption =='All'){
-            searchs = auxArr
-        }else{
-            auxArr = searchs
-            searchs = searchs.filter((el)=>
-                 el.is_favorite
-            )
-        }
-    }
 </script>
 
 <div class="bg-[#Dde2fd] min-h-screen">
@@ -70,12 +68,12 @@
     <div class="flex w-full justify-center">
         <div class="w-10/12 sm:w-7/12 md:w-5/12">
             <div class="flex justify-center items-center p-2 bg-white w-full shadow-md rounded focus-within:bg-gray-100">
-                <input class="p-2 focus:outline-none flex-grow focus:bg-gray-100" type="text" placeholder="Search..."/>
+                <input bind:value={$searchStore.search} class="p-2 focus:outline-none flex-grow focus:bg-gray-100" type="text" placeholder="Search..."/>
                 <i class="fa-solid fa-magnifying-glass"></i>       
             </div>
             <div>
                 <h3 class="block">Show</h3>
-                <select bind:value={selectedOption} on:change={handleOptionChange} class="block appearance-none w-1/6 bg-white border border-gray-300 hover:border-gray-500 p-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                <select bind:value={$searchStore.filter} class="block appearance-none w-1/6 bg-white border border-gray-300 hover:border-gray-500 p-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
                     <option value='All'>All</option>
                     <option value='Favorite'>Favorite</option>
                   </select>
@@ -85,7 +83,7 @@
                 <h2 class="w-2/6">Creation date</h2>
             </div>
             <ul role="list" class="w-full divide-y divide-slate-200 bg-white p-3"> 
-                {#each searchs as search, index}
+                {#each $searchStore.filtered as search, index}
                     <li class="w-full bg-white flex p-3 items-center hover:bg-slate-200 group">
                         <input class="w-3/6 group-hover:bg-slate-200 disabled:bg-white bg-slate-400" disabled={editableId!==search.id} type="text" bind:value={search.name} bind:this={inputs[index]}/>
                         <p class="w-2/6">{search.created_at.replace('T',' ').replace(/\.\d+Z$/, '')}</p>
