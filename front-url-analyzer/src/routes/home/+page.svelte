@@ -33,8 +33,12 @@
             alert('Error conectando con el servidor. Intentalo de nuevo más tarde')
         }else{
             const searchObject = await response.json()
-            searchs = searchs.map((el)=>{
-                return el.id !== searchObject.search.id? el: searchObject.search
+            searchObject.search['searchTerms'] = searchObject.search.name
+            searchStore.update((storeData)=>{
+                const filteredData = storeData.data.map((element)=>{
+                    return element.id != searchObject.search.id? element: searchObject.search
+                })
+                return { ...storeData, data:filteredData, filtered: filteredData}
             })
         }
     }
@@ -87,8 +91,9 @@
                     <li class="w-full bg-white flex p-3 items-center hover:bg-slate-200 group">
                         <input class="w-3/6 group-hover:bg-slate-200 disabled:bg-white bg-slate-400" disabled={editableId!==search.id} type="text" bind:value={search.name} bind:this={inputs[index]}/>
                         <p class="w-2/6">{search.created_at.replace('T',' ').replace(/\.\d+Z$/, '')}</p>
-                        <i class="fa-solid fa-pencil pr-4" on:click={() => handleEditClick(search, index)}></i>
-                        <i class={"fa-solid fa-star " + (search.is_favorite? "fa-star_active ": "fa-star_inactive")} role="button" tabindex="0" on:click={handleStarClick} id={search.id}></i>
+                        <i class="fa-solid fa-pencil p-2" on:click={() => handleEditClick(search, index)}></i>
+                        <i class={"fa-solid p-2 fa-star " + (search.is_favorite? "fa-star_active ": "fa-star_inactive")} role="button" tabindex="0" on:click={handleStarClick} id={search.id}></i>
+                        <i class="p-2 fa-solid trash fa-trash"></i>
                     </li>
                 {/each} 
             </ul>
@@ -106,6 +111,13 @@
     }
     .fa-star_inactive:hover{
         color: #FFD43B;
+        transition: 0.2s
+    }
+    .fa-trash{
+        color: #f95353;
+    }
+    .fa-trash:hover{
+        color: #ba1414;
         transition: 0.2s
     }
 </style>

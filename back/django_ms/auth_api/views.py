@@ -65,7 +65,7 @@ def logout_view(request):
 @permission_classes([IsAuthenticated])
 def get_search_id(request):
     userId = request.user.id
-    searchs = Search.objects.filter(created_by=userId)
+    searchs = Search.objects.filter(created_by=userId).order_by('-created_at')
     serializer = SearchSerializer(searchs, many=True)
     return Response({"message": "Searchs found correctly", "searchs": serializer.data})
 
@@ -86,7 +86,7 @@ def update_search_is_favorite(request, id):
 @api_view(['PATCH'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def update_search_is_favorite(request, id):
+def update_search_name(request, id):
     userId = request.user.id
     search = get_object_or_404(Search, created_by= userId, id= id)
     search.name = request.data['name']
