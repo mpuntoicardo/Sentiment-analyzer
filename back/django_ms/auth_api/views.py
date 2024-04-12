@@ -81,3 +81,15 @@ def update_search_is_favorite(request, id):
     search.save()
     serializer = SearchSerializer(search)
     return Response({"message":"Search updated successfully", "search": serializer.data})
+
+#Updates the name of a search
+@api_view(['PATCH'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def update_search_is_favorite(request, id):
+    userId = request.user.id
+    search = get_object_or_404(Search, created_by= userId, id= id)
+    search.name = request.data['name']
+    search.save()
+    serializer = SearchSerializer(search)
+    return Response({"message":"Search updated successfully", "search": serializer.data})
