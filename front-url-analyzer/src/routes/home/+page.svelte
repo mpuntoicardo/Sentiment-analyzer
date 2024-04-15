@@ -1,6 +1,9 @@
 <script>
     import { tick, onDestroy } from 'svelte';
     import {createSearchStore, searchHandler} from '$lib/stores/search'
+
+    import {updateName, set_favorite} from './api'
+
     export let data;
 
     const {user} = data
@@ -22,36 +25,32 @@
 
     //Turns a search from favorite to non-favorite or viceversa when star is clicked
     const handleStarClick = async(e)=>{
-        const response = await fetch(`http://127.0.0.1:8000/setSearchFavorite/${e.target.id}/`, {
-        method: "PATCH",
-        mode: "cors",
-        headers:{
-            "Authorization": "Token "+ data.token,
-        },
-        })
-        if(!response.ok){
-            alert('Error conectando con el servidor. Intentalo de nuevo más tarde')
-        }else{
-            const searchObject = await response.json()
-            searchObject.search['searchTerms'] = searchObject.search.name
+        const searchObject = await set_favorite(e, data.token)
+        updateStoreWithNewSearch(searchObject)
+    }
+
+    //This function takes a search which name or is_favorite has been updated and insert it into store
+    const updateStoreWithNewSearch = (searchObject)=>{
+        searchObject.search['searchTerms'] = searchObject.search.name
             searchStore.update((storeData)=>{
                 const filteredData = storeData.data.map((element)=>{
                     return element.id != searchObject.search.id? element: searchObject.search
                 })
                 return { ...storeData, data:filteredData, filtered: filteredData}
             })
-        }
+            console.log($searchStore)
     }
 
     let editableId = null
-
+    let editableIndex = null
     const handleEditClick = async(search,index)=>{
         editableId = search.id
+        editableIndex = index
         await tick()
         inputs[index].focus()
         document.addEventListener('click', handleClick, true)
     }
-    function handleClick(event){
+    async function handleClick(event){
             if (editableId !== null) {
                 let isOutside = true;
                 inputs.forEach(input => {
@@ -60,7 +59,10 @@
                     }
                 });
             if (isOutside) {
+                const newSearch = await updateName(inputs[editableIndex].value, editableId, data.token)
+                updateStoreWithNewSearch(newSearch)
                 editableId = null;
+                editableIndex = null
                 document.removeEventListener('click', handleClick, true);
             }
         }
@@ -89,7 +91,7 @@
             <ul role="list" class="w-full divide-y divide-slate-200 bg-white p-3"> 
                 {#each $searchStore.filtered as search, index}
                     <li class="w-full bg-white flex p-3 items-center hover:bg-slate-200 group">
-                        <input class="w-3/6 group-hover:bg-slate-200 disabled:bg-white bg-slate-400" disabled={editableId!==search.id} type="text" bind:value={search.name} bind:this={inputs[index]}/>
+                        <input class="w-3/6 group-hover:bg-slate-200 disabled:bg-white px-2 focus:border-b-2" disabled={editableId!==search.id} type="text" value={search.name} bind:this={inputs[index]}/>
                         <p class="w-2/6">{search.created_at.replace('T',' ').replace(/\.\d+Z$/, '')}</p>
                         <i class="fa-solid fa-pencil p-2" on:click={() => handleEditClick(search, index)}></i>
                         <i class={"fa-solid p-2 fa-star " + (search.is_favorite? "fa-star_active ": "fa-star_inactive")} role="button" tabindex="0" on:click={handleStarClick} id={search.id}></i>

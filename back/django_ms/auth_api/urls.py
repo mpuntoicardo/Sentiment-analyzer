@@ -8,5 +8,6 @@ urlpatterns = [
     re_path('logout', views.logout_view),
     re_path('get_search_id', views.get_search_id),
     path('setSearchFavorite/<int:id>/', views.update_search_is_favorite),
+    path('updateSearchName/<int:id>/', views.update_search_name),
 ]
 
