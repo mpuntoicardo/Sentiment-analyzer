@@ -93,3 +93,14 @@ def update_search_name(request, id):
     search.save()
     serializer = SearchSerializer(search)
     return Response({"message":"Search updated successfully", "search": serializer.data})
+
+#Delete search a search
+@api_view(['DELETE'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def delete_search(request, id):
+    userId = request.user.id
+    search = get_object_or_404(Search, created_by= userId, id= id)
+    search.delete()
+    serializer = SearchSerializer(search)
+    return Response({"message":"Search deleted successfully", "search": serializer.data})

@@ -31,3 +31,14 @@ export const set_favorite = async(e,token)=>{
             return searchObject
         }
 }
+export const delete_search = async(id, token)=>{
+    const response = await fetch(`http://127.0.0.1:8000/deleteSearch/${id}/`, {
+        method: "DELETE",
+        mode: "cors",
+        headers:{
+            "Authorization": "Token "+ token,
+        },
+    })
+    const data = await response.json()
+    return data
+}

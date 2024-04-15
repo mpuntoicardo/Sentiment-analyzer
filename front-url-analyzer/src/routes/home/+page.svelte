@@ -2,7 +2,7 @@
     import { tick, onDestroy } from 'svelte';
     import {createSearchStore, searchHandler} from '$lib/stores/search'
 
-    import {updateName, set_favorite} from './api'
+    import {updateName, set_favorite, delete_search} from './api'
 
     export let data;
 
@@ -38,7 +38,6 @@
                 })
                 return { ...storeData, data:filteredData, filtered: filteredData}
             })
-            console.log($searchStore)
     }
 
     let editableId = null
@@ -65,6 +64,20 @@
                 editableIndex = null
                 document.removeEventListener('click', handleClick, true);
             }
+        }
+    }
+
+    async function handleDeleteClick(id){
+        try{
+            const deletedSearch = await delete_search(id, data.token)
+            searchStore.update((storeData)=>{
+                    const filteredData = storeData.data.filter((element)=>{
+                        return element.id != id 
+                    })
+                    return { ...storeData, data:filteredData, filtered: filteredData}
+                })
+        }catch(error){
+            alert('Error deleting search')
         }
     }
 </script>
@@ -95,7 +108,7 @@
                         <p class="w-2/6">{search.created_at.replace('T',' ').replace(/\.\d+Z$/, '')}</p>
                         <i class="fa-solid fa-pencil p-2" on:click={() => handleEditClick(search, index)}></i>
                         <i class={"fa-solid p-2 fa-star " + (search.is_favorite? "fa-star_active ": "fa-star_inactive")} role="button" tabindex="0" on:click={handleStarClick} id={search.id}></i>
-                        <i class="p-2 fa-solid trash fa-trash"></i>
+                        <i class="p-2 fa-solid trash fa-trash" on:click={()=>handleDeleteClick(search.id)}></i>
                     </li>
                 {/each} 
             </ul>

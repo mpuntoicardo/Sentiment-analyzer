@@ -24,5 +24,4 @@ export const searchHandler = (store)=>{
             return item.searchTerms.toLowerCase().includes(searchTerm)
         }
     })
-    console.log(store)
 }
