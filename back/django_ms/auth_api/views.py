@@ -15,7 +15,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404
 
-from .models import Search
+from .models import Search, Url, Keyword
+from django.db.models import Prefetch
 
 @api_view(['POST'])
 def login(request):
@@ -104,3 +105,33 @@ def delete_search(request, id):
     search.delete()
     serializer = SearchSerializer(search)
     return Response({"message":"Search deleted successfully", "search": serializer.data})
+
+#Get info for search
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_search_info(request, id):
+    userId = request.user.id
+
+    url_queryset = Url.objects.filter(search_id__created_by=userId, search_id__id=id)
+    keyword_queryset = Keyword.objects.filter(search_id__created_by=userId, search_id__id=id)
+
+    #Inner join
+    search = Search.objects.prefetch_related(
+        Prefetch('url_set', queryset=url_queryset),
+        Prefetch('keyword_set', queryset=keyword_queryset)
+    ).filter(id=id).first()
+    if not search:
+        return Response({"message": "Search not found"}, status=status.HTTP_404_NOT_FOUND)
+    searchSer = SearchSerializer(search)
+    url_queryset = search.url_set.all()
+    keyword_queryset = search.keyword_set.first()
+
+    url_serializer = UrlSerializer(url_queryset, many=True)
+
+    if keyword_queryset:
+        keyword_serializer = KeywordSerializer(keyword_queryset)
+    else:
+        keyword_serializer = None
+
+    return Response({"message":"Search found successfully", "search": searchSer.data, "urls": url_serializer.data, "keyword":keyword_serializer.data if keyword_serializer else None})

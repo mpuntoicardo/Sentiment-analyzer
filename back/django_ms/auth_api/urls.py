@@ -10,5 +10,6 @@ urlpatterns = [
     path('setSearchFavorite/<int:id>/', views.update_search_is_favorite),
     path('updateSearchName/<int:id>/', views.update_search_name),
     path('deleteSearch/<int:id>/', views.delete_search),
+    path('get_search_info/<int:id>/', views.get_search_info),
 ]
 
