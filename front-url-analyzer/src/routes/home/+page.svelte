@@ -5,6 +5,7 @@
 
     import {updateName, set_favorite, delete_search} from './api'
   import ErrorMessage from '../../lib/Components/errorMessage.svelte';
+  import Modal from '../../lib/Components/modal.svelte';
 
     export let data;
 
@@ -79,20 +80,7 @@
         }
     }
 
-    async function handleDeleteClick(event, id){
-        event.stopPropagation();
-        try{
-            const deletedSearch = await delete_search(id, data.token)
-            searchStore.update((storeData)=>{
-                    const filteredData = storeData.data.filter((element)=>{
-                        return element.id != id 
-                    })
-                    return { ...storeData, data:filteredData, filtered: filteredData}
-                })
-        }catch(error){
-            alert('Error deleting search')
-        }
-    }
+    
     //Handle input being clicked on disabled
     function handleClickOnDisabled(e,id){
         e.stopPropagation()
@@ -102,8 +90,37 @@
     function handleListClick(search){
         goto(`/home/${search.id}`)
     }
-</script>
 
+    let showModal = false
+    let idToDelete = null
+    function handleModal(event, id){
+        event?.stopPropagation()
+        showModal = !showModal
+        if(showModal){
+            idToDelete = id
+        }else{
+            idToDelete = null
+        }
+    }
+    async function handleDeleteClick(){
+        try{
+            const deletedSearch = await delete_search(idToDelete, data.token)
+            searchStore.update((storeData)=>{
+                    const filteredData = storeData.data.filter((element)=>{
+                        return element.id != idToDelete
+                    })
+                    return { ...storeData, data:filteredData, filtered: filteredData}
+                })
+            idToDelete=null
+            showModal = false
+        }catch(error){
+            alert('Error deleting search')
+        }
+    }
+</script>
+{#if showModal}
+    <Modal closeModal={handleModal} onDelete={handleDeleteClick}></Modal>
+{/if}
 <div class="background min-h-screen">
     <h1 class="text-3xl text-center py-4 text-white font-bold">Welcome back {user.name || ""}!</h1>
     <div class="flex w-full justify-center">
@@ -140,7 +157,7 @@
                         <div class="flex flex-col sm:flex-row">
                             <i class="fa-solid fa-pencil pencil p-2" on:click={(event) => handleEditClick(event,search, index)}></i>
                             <i class={"fa-solid p-2 fa-star " + (search.is_favorite? "fa-star_active ": "fa-star_inactive")} role="button" tabindex="0" on:click={handleStarClick} id={search.id}></i>
-                            <i class="p-2 fa-solid trash fa-trash" on:click={(event)=>handleDeleteClick(event, search.id)}></i>
+                            <i class="p-2 fa-solid trash fa-trash" on:click={(event)=>handleModal(event, search.id)}></i>
                         </div>
                     </li>
                 {/each} 

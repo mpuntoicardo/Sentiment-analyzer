@@ -9,6 +9,8 @@
     import { store } from './store.js'
     import Results from './results.svelte';  
 
+    export let data
+
     export let urls = []
     let url = ''
     let showErrorUrl = false
@@ -66,48 +68,17 @@
         showLoadingSpinner = true
         showErrorApi = false
         try{
-           /*const response = await fetch('http://127.0.0.1:5000/urlsAnalyzer',{
+           const response = await fetch('http://127.0.0.1:5000/urlsAnalyzer',{
                 method: "POST",
                 mode: "cors",
                 headers:{
                     "Content-Type": "application/json",
+                    "Authorization": "Token " + (data.token || "")
                 },
                 body: JSON.stringify(body)
             })
-            const data = await response.json()*/
-            const data = {
-    entitiesSpotted: {
-        "LOC": 38,
-        "MISC": 359,
-        "ORG": 57,
-        "PER": 42
-    },
-    failedUrls: [],
-    globalResults: {
-        "NEG": 66,
-        "NEU": 326,
-        "POS": 31
-    },
-    overallSent: "POS",
-    phraseContainsKeyword: {
-        count: {
-            "NO": 387,
-            "YES": 36
-        },
-        no: {
-            "NEG": 56,
-            "NEU": 302,
-            "POS": 29
-        },
-        yes: {
-            "NEG": 10,
-            "NEU": 24,
-            "POS": 2
-        }
-    },
-    summary: "** Análisis de los iPhone 15 y iPhone 15 Plus: un resumen  en detalle**\n\n**Diseño:**\n* Mismos diseños que el iPhone  14\n* Ligera mejora en la comodidad\n* Resistencia al agua IP68\n* USB-C reemplaza a Lightning\n\n**Pantalla:** \n* OLED de 6,1\" (iPhone 15) y 6,7\" (iPhone 15 Plus)\n* Dynamic Island  con notificaciones mejoradas\n* Alta calidad con brillo de hasta 2000 nits\n* Sin ProMotion (refresco de pantalla a 60 Hz)\n\n**Sonido:**\n* Altavoces estéreo potentes\n * USB-C permite salida de audio\n* Sin puerto de auriculares\n\n**Potencia:**\n* Procesador Apple A16 Bionic\n* Rendimiento de primera línea comparable al iPhone 14 Pro\n* Buena gestión del calor \n\n**Batería:**\n* Mayor duración de la batería que el iPhone 14\n* Hasta tres días de uso con el iPhone 15 Plus\n* Carga rápida de hasta 30 W\n\n**Fotografía:**\n* Cámaras traseras duales (principal de 48 MP, ultra gran  angular de 12 MP)\n* Sensor principal mejorado con alta nitidez y rango dinámico\n* Modo Retrato automático\n* Sin teleobjetivo, pero zoom óptico de 2x\n\n**Puntos destacados:**\n* USB-C para carga y conectividad\n* Dynamic Island para notificaciones mejoradas\n*  Mayor duración de la batería\n* Cámaras traseras mejoradas\n\n**Puntos débiles:**\n* Pantalla sin ProMotion (refresco de pantalla a 60 Hz)\n* Sin teleobjetivo\n* Altavoz principal más débil que el iPhone 14 Pro"
-}
-            store.set(data)
+            const res = await response.json()
+            store.set(res)
             showLoadingSpinner = false
             showResults = true
             await new Promise(resolve => requestAnimationFrame(resolve));
