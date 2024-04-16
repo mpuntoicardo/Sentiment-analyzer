@@ -2,8 +2,12 @@
     import { tick } from 'svelte';
     import {set_favorite, updateName} from '../api'
     import ErrorMessage from '../../../lib/Components/errorMessage.svelte';
+    import Results from '../../results.svelte';
+    import { store } from '../../store';
+
     export let data
 
+    console.log(data)
 
     let showErrorMessage = false
 
@@ -42,7 +46,22 @@
         await set_favorite(data.data.search.id, data.token)
     }
 
-    
+    let showResults = false
+
+    async function handleButtonClick(){
+        const result_id = data.data.search.result_id 
+        const result = await fetch(`http://127.0.0.1:5000//getResult/${result_id}`,{
+            method: "GET",
+            mode: "cors",
+        })
+        const resultData = await result.json()
+        store.set(resultData)
+        showResults = true
+        await tick()
+        document.querySelector('#results-section').scrollIntoView({
+                behavior: 'smooth'
+        });
+    }
 </script>
 
 <div class="min-h-screen background flex justify-center items-start py-16">
@@ -59,7 +78,7 @@
             <ErrorMessage msg='Name can not be blank' css=' block '></ErrorMessage>
         {/if}
         <h2 class="text-xl font-semibold pl-4 mt-5">Urls:</h2>
-        <ul class="divide-y divide-slate-200 p-1" role='list'>
+        <ul class="divide-y divide-slate-300 p-1" role='list'>
             {#each data.data.urls as url}
                 <li class="hover:bg-slate-200 rounded-md" role="button">
                     <a href={url.domain_name} class="w-100 h-100 block p-3" target="_blank">
@@ -72,12 +91,14 @@
             <h2 class="text-xl font-semibold block py-1">Keyword:</h2>
             <p class="pt-2">{data.data.keyword.word}</p>
             <div class="flex w-100 justify-center pt-9">
-                <button class="bg-blue-500 rounded-full text-white w-4/12 p-3 hover:bg-blue-800">Show results</button>
+                <button class="bg-blue-500 rounded-full text-white w-4/12 p-3 hover:bg-blue-800" on:click={handleButtonClick}>Show results</button>
             </div>
         </div>
     </div>
-
 </div>
+{#if showResults}
+    <Results/>
+{/if}
 
 <style lang="postcss">
     .background{

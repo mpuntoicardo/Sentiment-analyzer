@@ -17,6 +17,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from bson.objectid import ObjectId
 
 uri = "mongodb+srv://admin:admin@cluster0.dpvmmqw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
@@ -68,3 +69,18 @@ def singleUrlAnalysis():
         keyword=''
     results = analyzeUrls([url], keyword, True)
     return jsonify(results), 200
+
+@app.route("/getResult/<id>", methods=['GET'])
+@cross_origin()
+def get_results(id):
+    try:
+        # MongoDB stores IDs as ObjectId, not as strings
+        document = collection.find_one({'_id': ObjectId(id)})
+        if document:
+            # Convert the ObjectId to a string if needed
+            document['_id'] = str(document['_id'])
+            return jsonify(document)
+        else:
+            return jsonify({"error": "Document not found"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400

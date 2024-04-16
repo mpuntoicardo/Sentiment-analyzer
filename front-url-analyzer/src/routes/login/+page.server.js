@@ -21,7 +21,8 @@ export const actions = {
                 const data = await response.json()
                 cookies.set("auth", data.token,{
                     path: '/',
-                    maxAge: 60 * 60 * 24 * 31
+                    maxAge: 60 * 60 * 24 * 31,
+                    httpOnly:true
                 })
                 return redirect(303, '/home');
             }else{
