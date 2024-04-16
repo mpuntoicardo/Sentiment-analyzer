@@ -24,11 +24,14 @@
 
 <div class="w-full flex px-5 py-3 items-center">
     <h1 class="text-md tracking-widest title w-1/3">Sentiment analysis</h1>
-    <nav class="flex justify-center space-x-10 w-full">
-        {#if $isHomeIdPage}
-            <a href="/home" class="font-medium rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-800">Home</a>
-        {/if}
-        <a href="/login" class="font-medium rounded-lg p-2 text-blue-500 border-2 border-blue-500 hover:bg-blue-500 hover:text-white" on:click={handleLogoutClick}>Logout</a>
+    <nav class="flex justify-between w-full">
+        <div class="grow flex items-center justify-center gap-x-8 px-5">
+            <a href="/" data-sveltekit-preload-data="tap" class="font-medium rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-800 flex items-center h-full">+ Create Search</a>
+            {#if $isHomeIdPage}
+                <a href="/home" data-sveltekit-preload-data="tap" class="font-medium rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-800 flex items-center h-full ">Home</a>
+            {/if}
+        </div>
+        <a href="/login" data-sveltekit-preload-data="tap" class="font-medium rounded-lg p-2 text-blue-500 border-2 border-blue-500 hover:bg-blue-500 hover:text-white flex items-center" on:click={handleLogoutClick}>Logout</a>
     </nav>
 </div>
 <slot />

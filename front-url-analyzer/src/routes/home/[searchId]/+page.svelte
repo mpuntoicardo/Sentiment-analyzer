@@ -1,9 +1,11 @@
 <script>
     import { tick } from 'svelte';
-    import {set_favorite, updateName} from '../api'
+    import {delete_search, set_favorite, updateName} from '../api'
     import ErrorMessage from '../../../lib/Components/errorMessage.svelte';
     import Results from '../../results.svelte';
     import { store } from '../../store';
+    import Modal from '../../../lib/Components/modal.svelte';
+    import {goto} from '$app/navigation'
 
     export let data
 
@@ -61,16 +63,30 @@
                 behavior: 'smooth'
         });
     }
+
+    let showModal = false
+    const handleModal = ()=>{
+        showModal = !showModal
+    }
+
+    async function handleDeleteClick(){
+        await delete_search(data.data.search.id, data.token)
+        goto('/home')
+    }
 </script>
 
-<div class="min-h-screen background flex justify-center items-start py-16">
+
+{#if showModal}
+    <Modal closeModal={handleModal} onDelete={handleDeleteClick}></Modal>
+{/if}
+<div class="min-h-screen background flex justify-center items-start py-16 static">
     <div class="w-10/12 min-h-96 backdrop-blur-sm bg-white p-4 shadow-md rounded-md">
         <div class="flex flex-wrap items-center justify-between">
-            <input disabled={inputDisabled} bind:value={data.data.search.name} class="text-3xl font-bold bg-white pl-4" bind:this={input}>
+            <input disabled={inputDisabled} bind:value={data.data.search.name} class="text-3xl font-bold bg-white pl-4 w-2/3" bind:this={input}>
             <div>
                 <i class="fa-solid fa-pencil p-2 pencil" role="button" tabindex="0" on:click={onPencilClick}></i>
                 <i class={"fa-solid p-2 fa-star " + (data.data.search.is_favorite? "fa-star_active ": "fa-star_inactive")} role="button" tabindex="0" on:click={handleStarClick}></i>
-                <i class="p-2 fa-solid trash fa-trash" role="button" tabindex="0"></i>
+                <i class="p-2 fa-solid trash fa-trash" role="button" tabindex="0" on:click={handleModal}></i>
             </div>
         </div>
         {#if showErrorMessage}
@@ -90,7 +106,7 @@
             <h2 class="text-xl font-semibold block py-1">Keyword:</h2>
             <p class="pt-2">{data.data.keyword.word}</p>
             <div class="flex w-100 justify-center pt-9">
-                <button class="bg-blue-500 rounded-full text-white w-4/12 p-3 hover:bg-blue-800" on:click={handleButtonClick}>Show results</button>
+                <button class="bg-blue-500 rounded-full text-white w-6/12 sm:w-4/12 p-3 hover:bg-blue-800" on:click={handleButtonClick}>Show results</button>
             </div>
         </div>
     </div>
