@@ -16,8 +16,8 @@ export const updateName = async(name, id, token)=>{
     }
 }
 
-export const set_favorite = async(e,token)=>{
-    const response = await fetch(`http://127.0.0.1:8000/setSearchFavorite/${e.target.id}/`, {
+export const set_favorite = async(id,token)=>{
+    const response = await fetch(`http://127.0.0.1:8000/setSearchFavorite/${id}/`, {
         method: "PATCH",
         mode: "cors",
         headers:{

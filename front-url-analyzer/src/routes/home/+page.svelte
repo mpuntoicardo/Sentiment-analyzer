@@ -1,6 +1,7 @@
 <script>
     import { tick, onDestroy } from 'svelte';
     import {createSearchStore, searchHandler} from '$lib/stores/search'
+    import {goto} from '$app/navigation'
 
     import {updateName, set_favorite, delete_search} from './api'
 
@@ -25,7 +26,7 @@
 
     //Turns a search from favorite to non-favorite or viceversa when star is clicked
     const handleStarClick = async(e)=>{
-        const searchObject = await set_favorite(e, data.token)
+        const searchObject = await set_favorite(e.target.id, data.token)
         updateStoreWithNewSearch(searchObject)
     }
 
@@ -80,6 +81,9 @@
             alert('Error deleting search')
         }
     }
+    function handleListClick(search){
+        goto(`/home/${search.id}`)
+    }
 </script>
 
 <div class="bg-[#Dde2fd] min-h-screen">
@@ -103,7 +107,7 @@
             </div>
             <ul role="list" class="w-full divide-y divide-slate-200 bg-white p-3"> 
                 {#each $searchStore.filtered as search, index}
-                    <li class="w-full bg-white flex p-3 items-center hover:bg-slate-200 group">
+                    <li class="w-full bg-white flex p-3 items-center hover:bg-slate-200 group" on:click={()=>handleListClick(search)} role="button">
                         <input class="w-3/6 group-hover:bg-slate-200 disabled:bg-white px-2 focus:border-b-2" disabled={editableId!==search.id} type="text" value={search.name} bind:this={inputs[index]}/>
                         <p class="w-2/6">{search.created_at.replace('T',' ').replace(/\.\d+Z$/, '')}</p>
                         <i class="fa-solid fa-pencil p-2" on:click={() => handleEditClick(search, index)}></i>
