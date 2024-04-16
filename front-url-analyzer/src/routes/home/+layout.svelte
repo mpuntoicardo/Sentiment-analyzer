@@ -1,15 +1,24 @@
 <script>
     import { page } from '$app/stores';
     import { derived } from 'svelte/store';
+    import {goto} from '$app/navigation'
 
+    export let data
 
     const isHomeIdPage = derived(page, $page => {
         const regex = /^\/home\/\d+$/; //Regex for /home/<int:id>
         const isMatch = regex.test($page.url.pathname);
         return isMatch;
     });
-    const handleLogoutClick = ()=>{
-
+    const handleLogoutClick = async()=>{
+        await fetch('http://127.0.0.1:8000/logout',{
+            method: 'DELETE',
+            mode:'cors',
+            headers: {
+                "Authorization": 'Token ' + data.token
+            }
+        })
+        goto('login')
     }
 </script>
 

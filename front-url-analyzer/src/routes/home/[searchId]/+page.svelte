@@ -7,7 +7,6 @@
 
     export let data
 
-    console.log(data)
 
     let showErrorMessage = false
 
