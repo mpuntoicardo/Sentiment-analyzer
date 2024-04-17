@@ -4,12 +4,19 @@
         import PieChart from '../lib/Components/pieChart.svelte';
         import ErrorResult from './errorResult.svelte';
         import { store } from './store.js'
+        import { scale } from "svelte/transition";
+
+        let showFailedUrls = false
+
+        function handeleShowFailedUrls(){
+            showFailedUrls = !showFailedUrls
+        }
 
 </script>
 
 <section id='results-section'>
     {#if $store.overallSent}
-        <div class="md:p-10 py-10">
+        <div class="md:p-10 pt-10 pb-5">
             <div class="flex flex-col items-center gap-y-2">
                 <h1 class="text-5xl text-center">Search results</h1>
                 <div class="md:w-4/12 flex justify-center">
@@ -20,15 +27,28 @@
                 </div>
                 {#if $store.failedUrls.length > 0}
                     <ErrorMessage msg={'Failed to retrieve info from ' + $store.failedUrls.length + " " + ($store.failedUrls.length > 1? "urls" : "url")}></ErrorMessage>
+                    <button class="bg-red-600 text-white rounded-full p-3 mt-3" on:click={handeleShowFailedUrls}>{showFailedUrls?"Hide": "Show"} url{$store.failedUrls.length == 1? "":"s"}<i class={"fa-solid fa-arrow-down px-2 "+(showFailedUrls? "open":"")}></i></button>
                 {/if}
             </div>
         </div>
+        {#if showFailedUrls}
+            <div class="w-full bg-red-200 flex flex-col items-center justify-center py-3 mt-2 gap-y-3" transition:scale>
+                <h2 class="text-3xl">Failed Url{$store.failedUrls.length == 1? "":"s"}:</h2>
+                <ol>
+                    {#each $store.failedUrls as failedUrl }
+                            <li>{failedUrl}</li>
+                    {/each}
+                </ol>
+            </div>
+        {/if}
+        {#if $store.summary}
         <div class="flex flex-col bg-[#Dde2fd] pb-10 items-center">
             <h2 class="text-3xl pt-10 pb-4">Urls content's summary</h2>
             <div class="md:px-32 px-5">
                 <p class="pt-4 summary">{$store.summary}</p>
             </div>
         </div>
+        {/if}
         <div class="grid grid-cols-2 pb-10 px-5 md:px-0">
             <div class="col-span-2 pt-10 pb-4">
                 <h2 class="text-3xl text-center">In depth results</h2>
@@ -86,5 +106,13 @@
     .summary{
         text-align: justify;
         text-justify: inter-word;
+    }
+    .fa-arrow-down{
+        transform: rotate(0deg);
+        transition: transform 0.4s linear;
+    }
+    .fa-arrow-down.open{
+        transform: rotate(180deg);
+        transition: transform 0.4s linear;
     }
 </style>
