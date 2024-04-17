@@ -8,13 +8,13 @@
     import {goto} from '$app/navigation'
 
     export let data
-
+    console.log(data)
 
     let showErrorMessage = false
 
     let inputDisabled = true
     let input
-    let initialName = data.data.search.name
+    let initialName = data.data?.search.name
     async function onPencilClick(e){
         inputDisabled = false
         await tick()
@@ -79,6 +79,7 @@
 {#if showModal}
     <Modal closeModal={handleModal} onDelete={handleDeleteClick}></Modal>
 {/if}
+{#if data.success}
 <div class="min-h-screen background flex justify-center items-start py-16 static">
     <div class="w-10/12 min-h-96 backdrop-blur-sm bg-white p-4 shadow-md rounded-md">
         <div class="flex flex-wrap items-center justify-between">
@@ -92,6 +93,7 @@
         {#if showErrorMessage}
             <ErrorMessage msg='Name can not be blank' css=' block '></ErrorMessage>
         {/if}
+        <h2 class="text-xl font-semibold pl-4 my-3">Created at: {data.data.search.created_at.replace('T',' ').replace(/\.\d+Z$/, '')}</h2>
         <h2 class="text-xl font-semibold pl-4 mt-5">Urls:</h2>
         <ul class="divide-y divide-slate-300 p-1" role='list'>
             {#each data.data.urls as url}
@@ -113,6 +115,11 @@
 </div>
 {#if showResults}
     <Results/>
+{/if}
+{:else}
+    <div class="min-h-screen flex  items-center justify-center background">
+        <h1 class="text-white font-bold text-5xl">Page not found 404</h1>
+    </div>
 {/if}
 
 <style lang="postcss">

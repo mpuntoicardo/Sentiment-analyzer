@@ -50,11 +50,11 @@
 		}
     }
     
-    function handleDeleteUrl({target: t}){
-        const urlToDelete = t.parentNode.children[1].innerHTML
-        urls = urls.filter((el)=>{
-            return el !== urlToDelete
+    function handleDeleteUrl(index){
+        urls = urls.filter((el, i)=>{
+            return  i !== index
         })
+
     }
 
     let showLoadingSpinner = false
@@ -104,6 +104,7 @@
             <Input label="Urls" placeholder="e.g. www.example.com" bind:inputValue={url} handleClick={handleClickUrlInput} showErrorUrl={showErrorUrl} handleKeyUp={handleKeyUpUrl}/>
             <Input label="Keyword" placeholder="e.g. Apple, Zara ..." bind:inputValue={keyword} handleClick={handleClickKeyWord} disabled={disableKeyWord} buttonValue={disableKeyWord? "Edit":"Add"} handleKeyUp={handleKeyUpKeyWord}/>
         </div>
+        <p class="infoP text-center pb-3">Consider <a href="/signup" class="underline">creating</a> an account or <a href="/login" class="underline">login</a> to automatically save your searchs</p>
         {#if urls.length}
         <div class="max-h-40 overflow-auto px-4 sm:px-8 shadow-inner">
             {#each urls as url, index}
@@ -136,7 +137,7 @@
         background: rgb(63,94,251);
         background: radial-gradient(circle, rgba(63,94,251,0.9458377100840336) 11%, rgba(70,252,227,1) 100%);
     }
-    h1{
+    h1, .infoP{
         color:rgb(63,94,251)
     }
 </style>
