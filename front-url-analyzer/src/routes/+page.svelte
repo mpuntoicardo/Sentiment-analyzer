@@ -78,7 +78,7 @@
                 body: JSON.stringify(body)
             })
             const res = await response.json()
-            store.set(res)
+            store.set({...res, keyword: keyword})
             showLoadingSpinner = false
             showResults = true
             await new Promise(resolve => requestAnimationFrame(resolve));

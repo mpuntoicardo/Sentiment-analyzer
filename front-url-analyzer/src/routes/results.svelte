@@ -62,8 +62,7 @@
         </div>
         <div class="grid grid-cols-2 pb-10 bg-[#Dde2fd] px-5 md:px-0">
             <div class="col-span-2 pt-10 pb-4 order-first">
-                <!-- Change apple for response coming from api-->
-                <h2 class="text-3xl text-center">Keyword analysis: Apple</h2>
+                <h2 class="text-3xl text-center">Keyword analysis: {$store.keyword}</h2>
             </div>
             <div class="md:pl-32 md:pr-10 pt-4 col-span-2 md:col-span-1 md:order-1 order-2">
                 <BarChart labels={Object.keys($store.phraseContainsKeyword.count)} label='Phrases count' chartData={Object.values($store.phraseContainsKeyword.count)} barColor1={'#0f367b'} barColor2={'#0f367b'}/>

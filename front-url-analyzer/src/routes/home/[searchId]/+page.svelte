@@ -51,12 +51,12 @@
 
     async function handleButtonClick(){
         const result_id = data.data.search.result_id 
-        const result = await fetch(`http://127.0.0.1:5000//getResult/${result_id}`,{
+        const result = await fetch(`http://127.0.0.1:5000/getResult/${result_id}`,{
             method: "GET",
             mode: "cors",
         })
         const resultData = await result.json()
-        store.set(resultData)
+        store.set({...resultData, keyword: data.data.keyword.word})
         showResults = true
         await tick()
         document.querySelector('#results-section').scrollIntoView({
