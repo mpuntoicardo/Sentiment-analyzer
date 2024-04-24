@@ -10,7 +10,7 @@
     import Results from './results.svelte';  
 
     export let data
-    console.log(data)
+
 
     export let urls = []
     let url = ''
@@ -63,6 +63,7 @@
     let showResults = false
     async function handleSubmit(){
         const body={
+            name: searchName,
             urls,
             keyword
         }
@@ -91,8 +92,23 @@
             showErrorApi = true
             console.log(Error)
         }
+
     }
-    
+    let searchName = ''
+    let disabledSearchName = false
+    function handleClickSearchName(){
+        searchName=searchName.trim()
+        if(searchName!==""){
+            disabledSearchName = !disabledSearchName
+        }
+    }
+    function handleKeyUpSearchName(){
+        if (event.code == 'Enter') {
+            event.preventDefault()
+            handleClickSearchName()
+			return false
+		}
+    }
 </script>
 
 
@@ -102,7 +118,10 @@
             <h1 class="text-5xl text-center text-cyan-800"><strong>Sentiment Analysis</strong></h1>
         </div>
         <div class="flex flex-col">
-            <Input label="Urls" placeholder="e.g. www.example.com" bind:inputValue={url} handleClick={handleClickUrlInput} showErrorUrl={showErrorUrl} handleKeyUp={handleKeyUpUrl}/>
+            {#if data.loggedIn}
+                <Input label="Search Name" placeholder="Opinion on Apple" bind:inputValue={searchName} handleClick={handleClickSearchName} handleKeyUp={handleKeyUpSearchName} disabled={disabledSearchName} buttonValue={disabledSearchName? "Edit":"Add"}/>
+            {/if}
+            <Input label="Urls" placeholder="e.g. www.example.com" bind:inputValue={url} handleClick={handleClickUrlInput} showErrorUrl={showErrorUrl} handleKeyUp={handleKeyUpUrl} />
             <Input label="Keyword" placeholder="e.g. Apple, Zara ..." bind:inputValue={keyword} handleClick={handleClickKeyWord} disabled={disableKeyWord} buttonValue={disableKeyWord? "Edit":"Add"} handleKeyUp={handleKeyUpKeyWord}/>
         </div>
         {#if data.loggedIn}
