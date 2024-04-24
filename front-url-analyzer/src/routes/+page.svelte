@@ -10,6 +10,7 @@
     import Results from './results.svelte';  
 
     export let data
+    console.log(data)
 
     export let urls = []
     let url = ''
@@ -104,7 +105,11 @@
             <Input label="Urls" placeholder="e.g. www.example.com" bind:inputValue={url} handleClick={handleClickUrlInput} showErrorUrl={showErrorUrl} handleKeyUp={handleKeyUpUrl}/>
             <Input label="Keyword" placeholder="e.g. Apple, Zara ..." bind:inputValue={keyword} handleClick={handleClickKeyWord} disabled={disableKeyWord} buttonValue={disableKeyWord? "Edit":"Add"} handleKeyUp={handleKeyUpKeyWord}/>
         </div>
-        <p class="infoP text-center pb-3">Consider <a href="/signup" class="underline">creating</a> an account or <a href="/login" class="underline">login</a> to automatically save your searchs</p>
+        {#if data.loggedIn}
+            <p class="infoP text-center pb-3">In your  <a href="/home" class="underline">dashboard</a> you can see your search history.</p>
+        {:else}  
+            <p class="infoP text-center pb-3">Consider <a href="/signup" class="underline">creating</a> an account or <a href="/login" class="underline">login</a> to automatically save your searchs</p>
+        {/if}
         {#if urls.length}
         <div class="max-h-40 overflow-auto px-4 sm:px-8 shadow-inner">
             {#each urls as url, index}

@@ -1,5 +1,7 @@
-export const load =async({cookies})=>{
+export const load =async({locals, cookies})=>{
+    if(!locals.user){
+        return {loggedIn: false}
+    }
     const token = cookies.get('auth')
-
-    return {token}
+    return {token, loggedIn: true}
 }
