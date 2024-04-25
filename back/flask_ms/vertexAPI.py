@@ -3,6 +3,9 @@ from vertexai.generative_models import GenerativeModel, ChatSession
 
 from threading import Thread
 
+
+import re
+
 class CustomThread(Thread):
     # constructor
     def __init__(self,promptTexts):
@@ -28,10 +31,12 @@ def get_chat_response(chat: ChatSession, prompt: str) -> str:
     return response.candidates[0].content.parts[0]._raw_part.text
 
 def get_Summary(texts: list)->str:
-    if len(texts)>1:
+    if len(texts)>=1:
         prompt = "A continuación te voy a dar unos textos numerados empezando por el 0. Quiero un resumen en detalle por separado de cada uno de ellos de máximo unas 6 líneas"
         for index, text in enumerate(texts):
             prompt+= f'\n {index}:  {text}'
-        return get_chat_response(chat, prompt)
+        result = get_chat_response(chat, prompt)
+        formatted_result = re.sub(r"[#*]", "", result)
+        return formatted_result
     else:
         return ''

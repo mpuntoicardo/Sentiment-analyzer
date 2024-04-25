@@ -104,15 +104,15 @@
                 </li>
             {/each}
         </ul>
-        {#if data.data.keyword.word}
         <div class="pl-4">
+            {#if data.data.keyword.word}
             <h2 class="text-xl font-semibold block py-1">Keyword:</h2>
             <p class="pt-2">{data.data.keyword.word}</p>
+            {/if}
             <div class="flex w-100 justify-center pt-9">
                 <button class="bg-blue-500 rounded-full text-white w-6/12 sm:w-4/12 p-3 hover:bg-blue-800" on:click={handleButtonClick}>Show results</button>
             </div>
         </div>
-        {/if}
     </div>
 </div>
 {#if showResults}
