@@ -23,7 +23,7 @@
 </script>
 
 <div class="w-full flex px-5 py-3 items-center">
-    <h1 class="text-md tracking-widest title w-1/3">Sentiment analysis</h1>
+    <h1 class="text-md tracking-widest title w-1/3"><a href="/home">Sentiment Analysis</a></h1>
     <nav class="flex justify-between w-full">
         <div class="grow flex items-center justify-center gap-x-8 px-5">
             <a href="/" data-sveltekit-preload-data="tap" class="font-medium rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-800 flex items-center h-full">+ Create Search</a>

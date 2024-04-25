@@ -117,6 +117,17 @@
             alert('Error deleting search')
         }
     }
+    //New to old or other way around
+    let orderItems = "newToOld"
+    function handleCreationOrderChange(){
+        searchStore.update((storeData)=>{
+            const newOrder = storeData.filtered.reverse()
+            return {...storeData,data:newOrder, filtered:newOrder}
+        })
+    }
+
+
+
 </script>
 {#if showModal}
     <Modal closeModal={handleModal} onDelete={handleDeleteClick}></Modal>
@@ -132,19 +143,28 @@
             {#if showErrorEmptyEdit}
                 <ErrorMessage msg='Search name can not be empty'></ErrorMessage>
             {/if}
-            <div>
-                <h3 class="block text-white">Show</h3>
-                <select bind:value={$searchStore.filter} class="block appearance-none w-1/6 bg-white border border-gray-300 hover:border-gray-500 p-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+            <div class="grid grid-rows-2 grid-flow-col place-content-start gap-x-4">
+                <div class="flex items-center">
+                    <h3 class="text-white">Show:</h3>
+                </div>
+                <select bind:value={$searchStore.filter}  class="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-500 p-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
                     <option value='All'>All</option>
                     <option value='Favorite'>Favorite</option>
-                  </select>
+                </select>
+                <div class="flex items-center">
+                    <h3 class="text-white">Order By:</h3>
+                </div>
+                <select bind:value={orderItems} on:change={handleCreationOrderChange} class="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-500 p-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"> 
+                    <option value="newToOld">Newest to oldest</option>
+                    <option value="oldToNew">Oldest to newest</option>
+                </select>
             </div>
             <div class="w-full bg-white flex rounded-t-md mt-3 border-b-4 border-slate-300">
                 <h2 class="w-3/6 border-r-4 border-slate-300 p-3">Name</h2>
                 <h2 class="w-2/6 p-3">Creation date</h2>
             </div>
             {#if $searchStore.filtered.length}
-            <ul role="list" class="w-full divide-y divide-slate-200 bg-white p-3 rounded-b-md"> 
+            <ul role="list" class="w-full divide-y divide-slate-200 bg-white p-3 rounded-b-md mb-20"> 
                 {#each $searchStore.filtered as search, index}
                     <li class="w-full bg-white flex p-3 items-center hover:bg-slate-200 group rounded-md" on:click={()=>handleListClick(search)} role="button">
                         <div class='relative inline-block w-3/6'>
