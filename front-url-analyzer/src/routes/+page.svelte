@@ -7,7 +7,7 @@
     import ErrorMessage from '../lib/Components/errorMessage.svelte';
 
     import { store } from './store.js'
-    import Results from './results.svelte';  
+    import Results from '../lib/Components/results.svelte';  
 
     export let data
 
@@ -136,7 +136,7 @@
             {/each}
         </div>
         <div class="flex flex-col justify-center items-center w-full mt-3">
-            <button on:click={handleSubmit} class="bg-blue-500 rounded-full text-white w-6/12 p-3 hover:bg-blue-800">Compute</button>
+            <button on:click={handleSubmit} class="bg-blue-500 rounded-full text-white w-6/12 p-3 hover:bg-blue-800">Analyze</button>
             {#if showLoadingSpinner}
                 <div class="mt-2">
                     <LoadingSpinner/>

@@ -3,7 +3,8 @@ from flask_cors import CORS, cross_origin
 
 from url_analyzer import analyzeUrls
 
-from producer import publish
+
+from producer import RabbitMQPublisher
 
 import requests, json
 
@@ -27,6 +28,7 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 db = client['sentiment_analyzer']
 collection = db['results']
 
+publisher = RabbitMQPublisher()
 
 @app.route("/urlsAnalyzer", methods=['POST'])
 @cross_origin()
@@ -47,12 +49,15 @@ def urlsAnalysis():
     headers = request.headers['Authorization']
     #Comprobar que los headers enviados en la request son correctos
     if headers and len(headers.split())>1:
-        isValidToken = requests.get('http://127.0.0.1:8000/test_token', headers={'Authorization': headers})
+        isValidToken = requests.get('http://127.0.0.1:8000/test_token', 
+                                    headers={'Authorization': headers})
         #Validamos con el microservicio de django que sea un token valido
         if isValidToken.ok:
             #Pasamos de Json a dict
             contentDict = json.loads(isValidToken.content)
-            publish({"result_id": results['_id'], "userId": contentDict['user']['id'], "urls": urls,"keyword": keyword, 'name':data.get('name') if data.get('name') else int(time.time()*1000) })
+            publisher.publish({"result_id": results['_id'], "userId": contentDict['user']['id'],
+                      "urls": urls,"keyword": keyword, 
+                      'name':data.get('name') if data.get('name') else int(time.time()*1000) })
     return jsonify(results), 200
 
 @app.route("/singleUrlAnalyzer", methods=['POST'])
@@ -74,6 +79,7 @@ def singleUrlAnalysis():
 @cross_origin()
 def get_results(id):
     try:
+        print('a')
         # MongoDB stores IDs as ObjectId, not as strings
         document = collection.find_one({'_id': ObjectId(id)})
         if document:

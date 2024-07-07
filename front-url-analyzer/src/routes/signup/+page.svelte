@@ -126,7 +126,7 @@
                 {/if}
             </div>
             <div class="flex flex-col items-center w-full">
-                <button class="bg-blue-500 rounded text-white w-6/12 p-3 hover:bg-blue-800" type="submit">Signup</button>
+                <button class="bg-blue-500 rounded text-white w-6/12 p-3 hover:bg-blue-800" type="submit">Sign up</button>
                 <p class="pt-3 text-sm underline text-blue-600 hover:text-blue-900 cursor-pointer"><a href="/login">Already have an account? Login here!</a></p>
             </div>
         </form>

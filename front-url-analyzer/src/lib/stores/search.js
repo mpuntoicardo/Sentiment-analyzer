@@ -19,7 +19,8 @@ export const searchHandler = (store)=>{
     const searchTerm = store.search.toLowerCase() || ''
     store.filtered = store.data.filter((item)=>{
         if(store.filter === "Favorite"){
-            return item.searchTerms.toLowerCase().includes(searchTerm) && item.is_favorite
+            return item.searchTerms.toLowerCase().includes(searchTerm) 
+            && item.is_favorite
         }else{
             return item.searchTerms.toLowerCase().includes(searchTerm)
         }

@@ -1,9 +1,9 @@
 <script>
-        import BarChart from '../lib/Components/barChart.svelte';
-        import ErrorMessage from '../lib/Components/errorMessage.svelte';
-        import PieChart from '../lib/Components/pieChart.svelte';
-        import ErrorResult from './errorResult.svelte';
-        import { store } from './store.js'
+        import BarChart from '$lib/Components/barChart.svelte';
+        import ErrorMessage from './errorMessage.svelte';
+        import PieChart from './pieChart.svelte';
+        import ErrorResult from '../../routes/errorResult.svelte';
+        import { store } from '../../routes/store.js'
         import { scale } from "svelte/transition";
 
         let showFailedUrls = false
@@ -93,7 +93,7 @@
                 </ul>
             </div>
             <div class="md:pr-32 pt-4 col-span-2 md:col-span-1 ">
-                <BarChart labels={Object.keys($store.entitiesSpotted)} label='Entitie count' chartData={Object.values($store.entitiesSpotted)} barColor1="#39bcf4" barColor2="#39bcf4" barColor3="#39bcf4" datalabelColor="#000000"/>
+                <BarChart labels={Object.keys($store.entitiesSpotted)} label='Entities count' chartData={Object.values($store.entitiesSpotted)} barColor1="#39bcf4" barColor2="#39bcf4" barColor3="#39bcf4" datalabelColor="#000000"/>
             </div>
         </div>
     {:else}

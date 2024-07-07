@@ -50,11 +50,11 @@ def analyzeUrls(urls, keyword = None, singleUrl = False) -> dict:
         except:
             failedUrls.append(url)
     
-
+    
     if not singleUrl:
         thread_gemini_text = CustomThread(promptTexts)
         thread_gemini_text.start()
-        
+    
 
     #Phrases with KeyWord
     phrasesKeyword = {
@@ -143,10 +143,11 @@ def analyzeUrls(urls, keyword = None, singleUrl = False) -> dict:
         if value >= overallSentCoun:
             overallSentCoun = value
             overallSent = key
-
+    
     if not singleUrl:
         thread_gemini_text.join()
         print(thread_gemini_text.value)
+
     return {
         'overallSent': overallSent,
         'globalResults': labToVal, 

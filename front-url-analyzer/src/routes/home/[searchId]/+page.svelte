@@ -2,7 +2,7 @@
     import { tick } from 'svelte';
     import {delete_search, set_favorite, updateName} from '../api'
     import ErrorMessage from '../../../lib/Components/errorMessage.svelte';
-    import Results from '../../results.svelte';
+    import Results from '../../../lib/Components/results.svelte';
     import { store } from '../../store';
     import Modal from '../../../lib/Components/modal.svelte';
     import {goto} from '$app/navigation'
@@ -51,17 +51,22 @@
 
     async function handleButtonClick(){
         const result_id = data.data.search.result_id 
-        const result = await fetch(`http://127.0.0.1:5000/getResult/${result_id}`,{
-            method: "GET",
-            mode: "cors",
-        })
-        const resultData = await result.json()
-        store.set({...resultData, keyword: data.data.keyword.word})
-        showResults = true
-        await tick()
-        document.querySelector('#results-section').scrollIntoView({
-                behavior: 'smooth'
-        });
+        try{
+            const result = await fetch(`http://127.0.0.1:5000/getResult/${result_id}`,{
+                method: "GET",
+                mode: "cors",
+            })
+            const resultData = await result.json()
+            console.log(resultData)
+            store.set({...resultData, keyword: data.data.keyword.word})
+            showResults = true
+            await tick()
+            document.querySelector('#results-section').scrollIntoView({
+                    behavior: 'smooth'
+            });
+        }catch(Error){
+            console.log(Error)
+        }
     }
 
     let showModal = false
@@ -83,7 +88,7 @@
 <div class="min-h-screen background flex justify-center items-start py-16 static">
     <div class="w-10/12 min-h-96 backdrop-blur-sm bg-white p-4 shadow-md rounded-md">
         <div class="flex flex-wrap items-center justify-between">
-            <input disabled={inputDisabled} bind:value={data.data.search.name} class="text-3xl font-bold bg-white pl-4 w-2/3" bind:this={input}>
+            <input disabled={inputDisabled} bind:value={data.data.search.name} class="text-3xl font-bold bg-white sm:pl-4 w-full sm:w-2/3" bind:this={input}>
             <div>
                 <i class="fa-solid fa-pencil p-2 pencil" role="button" tabindex="0" on:click={onPencilClick}></i>
                 <i class={"fa-solid p-2 fa-star " + (data.data.search.is_favorite? "fa-star_active ": "fa-star_inactive")} role="button" tabindex="0" on:click={handleStarClick}></i>
@@ -98,7 +103,7 @@
         <ul class="divide-y divide-slate-300 p-1" role='list'>
             {#each data.data.urls as url}
                 <li class="hover:bg-slate-200 rounded-md" role="button">
-                    <a href={url.domain_name} class="w-100 h-100 block p-3" target="_blank">
+                    <a href={url.domain_name} class="w-100 h-100 block p-3 truncate" target="_blank">
                         {url.domain_name}
                     </a>
                 </li>

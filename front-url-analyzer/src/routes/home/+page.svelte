@@ -164,9 +164,9 @@
                 <h2 class="w-2/6 p-3">Creation date</h2>
             </div>
             {#if $searchStore.filtered.length}
-            <ul role="list" class="w-full divide-y divide-slate-200 bg-white p-3 rounded-b-md mb-20"> 
+            <ul role="list" class="w-full divide-y divide-slate-200 bg-white sm:p-3 rounded-b-md mb-20"> 
                 {#each $searchStore.filtered as search, index}
-                    <li class="w-full bg-white flex p-3 items-center hover:bg-slate-200 group rounded-md" on:click={()=>handleListClick(search)} role="button">
+                    <li class="w-full bg-white flex md:p-3 items-center hover:bg-slate-200 group rounded-md" on:click={()=>handleListClick(search)} role="button">
                         <div class='relative inline-block w-3/6'>
                             <input class="w-full group-hover:bg-slate-200 disabled:bg-white px-2 focus:border-b-2" disabled={editableId!==search.id} type="text" value={search.name} bind:this={inputs[index]}/>
                             {#if editableId !== search.id}

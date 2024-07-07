@@ -20,5 +20,4 @@ export const authenticateUser = async(event)=>{
     }catch(error){
         return null
     }
-
 }
